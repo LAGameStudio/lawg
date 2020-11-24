@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <title>Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <!-- utility -->
+    <script type="text/javascript" src="lib/js.cookie.js"></script>
+    <script type="text/javascript" src="lib/jquery-3.5.1.js"></script>
+    <!-- input-->
+    <script type="text/javascript" src="lib/gamecontroller.js"></script>
+    <script type="text/javascript" src="lib/screenfull.js"></script>
+    <link rel="stylesheet" href="lib/magic-mouse.css">
+    <script type="text/javascript" src="lib/magic_mouse.js"></script>
+    <script type="text/javascript" src="lib/Tocca.js"></script>
+    <!-- audio -->
+    <!-- use only if you are intending to adhere to GPL3 <script type="text/javascript" src="lib/WebAudioFontPlayer.js"></script> -->
+    <!-- not initially activated <script type="text/javascript" src="lib/scriptracker-1.1.1.min.js"></script> -->
+    <script type="text/javascript" src="lib/howler.js"></script>
+    <script type="text/javascript" src="lib/howler.spatial.min.js"></script>
+    <!-- display -->
+    <script type="text/javascript" src="lib/three.js"></script>
+    <script type="text/javascript" src="lib/twgl-full.js"></script>
+    <script type="text/javascript" src="lib/tinycolor.js"></script>
+    <!-- lawg -->
+    <script type="text/javascript" src="engine/la.config.js"></script>
+    <script type="text/javascript" src="engine/la.util.js"></script>
+    <script type="text/javascript" src="engine/la.math.js"></script>
+    <script type="text/javascript" src="engine/la.string.js"></script>
+    <script type="text/javascript" src="engine/la.html.js"></script>
+    <script type="text/javascript" src="engine/la.audio.js"></script>
+    <script type="text/javascript" src="engine/la.display.js"></script>
+    <script type="text/javascript" src="engine/la.input.js"></script>
+    <script type="text/javascript" src="engine/la.color.js"></script>
+    <script type="text/javascript" src="engine/la.geo.js"></script>
+    <script type="text/javascript" src="engine/la.render.js"></script>
+    <script type="text/javascript" src="engine/la.events.js"></script>
+    <script type="text/javascript" src="engine/la.game.js"></script>
+    <script type="text/javascript" src="engine/la.framework.js"></script>
+    <!-- required style manipulations -->
+    <style>
+      body { padding:0; margin: 0; overflow: none }   /* Eliminates window padding */
+    </style>
+    <!-- your app -->
+    <!-- -->
+  </head>
+  <body>
+  </body>  
+  <!-- setup and initialization -->
+  <script type="text/javascript">
+    After(function(){
+     console.log(la);
+     la.renderers.Add(la.renderers.HTML5);
+    });
+  </script>
+</html>
