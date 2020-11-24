@@ -19,7 +19,7 @@ Using [Galvanic](http://github.com/h3rb/galvanic) or [Papi](http://github.com/h3
 
 #### Featured Libraries
 
-See the file ``lawg/lib/Readme.md``
+See the file ``lib/README.md`` [here](https://github.com/LAGameStudio/lawg/blob/trunk/lib/README.md)
 
 
 License
