@@ -19,6 +19,7 @@ class LARenderer extends ListItem {
   }
   
   ResizeTo( w, h ) {
+//    console.log("la.renderers.["+this.element.id+"].ResizeTo("+w+","+h+")");
     var oldw=this.w;
     var oldh=this.h;
     this.w=w;
@@ -29,7 +30,7 @@ class LARenderer extends ListItem {
      this.element.width=la.display.w;
      this.element.height=la.display.h;      
     }
-    OnResize(oldw,oldh);
+    this.OnResize(oldw,oldh);
   }
   
   OnResize( oldw, oldh ) {
@@ -145,6 +146,8 @@ class LARenderers extends LinkedList {
   }
   
   ResizeTo( w, h ) {
+//    console.log("la.renderers.ResizeTo("+w+","+h+")");
+//    console.log(this.list);
     for ( var i=0; i<this.list.length; i++ ) this.list[i].ResizeTo(w,h);
   }
   

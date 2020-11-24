@@ -464,7 +464,7 @@ class LinkedList {
   }
   item.next=null;
   item.memberOf=this;
-  this.list[this.LastIndex()]=item;
+  this.list[this.Count()]=item;
   item.OnIndexed(wasMemberOf);
  }
  

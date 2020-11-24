@@ -7,7 +7,7 @@ class LADisplay {
   }
   
   ResizeTo( w, h ) {
-    console.log("ResizeTo("+w+","+h+")");
+//    console.log("display.ResizeTo("+w+","+h+")");
     document.body.style.width=w+"px";
     document.body.style.height=h+"px";
     document.body.width=w;
@@ -19,9 +19,9 @@ class LADisplay {
      this.outer.width=w;
      this.outer.height=h;
     }
-    la.display.w=window.innerWidth;
-    la.display.h=window.innerHeight;
-    if ( la.renderers ) la.renderers.ResizeTo(w,h);
+    la.display.w=w;
+    la.display.h=h;
+    if ( defined(la.renderers) ) la.renderers.ResizeTo(w,h);
   }
   
   Resized() {
