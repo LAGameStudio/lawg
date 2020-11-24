@@ -4,7 +4,7 @@ L.A.W.G.
 #### Lost Astronaut's WEB Game Creation Framework
 
 A carefully selected series of Javascript frameworks, wrapped in a useful common library facilitating easy HTML5 game development in ways
-similar to (http://github.com/LAGameStudio/apolune)[Lost Astronaut Game Creation Framework] but also extensible using any 3rd party engine,
+similar to [Lost Astronaut Game Creation Framework](http://github.com/LAGameStudio/apolune) but also extensible using any 3rd party engine,
 including THREEjs, PixiJS, Phaser, and others.
 
 Designed to be cross-platform friendly, and leveraging web platform middleware, you can create complex 2D and 3D and 2.5D games using some
