@@ -1,11 +1,10 @@
 L.A.W.G.
 ========
 
-Lost Astronaut's WEB Game Creation Framework
---------------------------------------------
+#### Lost Astronaut's WEB Game Creation Framework
 
 A carefully selected series of Javascript frameworks, wrapped in a useful common library facilitating easy HTML5 game development in ways
-similar to [http://github.com/LAGameStudio/apolune](Lost Astronaut Game Creation Framework) but also extensible using any 3rd party engine,
+similar to (http://github.com/LAGameStudio/apolune)[Lost Astronaut Game Creation Framework] but also extensible using any 3rd party engine,
 including THREEjs, PixiJS, Phaser, and others.
 
 Designed to be cross-platform friendly, and leveraging web platform middleware, you can create complex 2D and 3D and 2.5D games using some
@@ -13,11 +12,10 @@ of the best open source.
 
 LAWG leverages its own interface to provide multiple-engine and HTML coexistance.
 
-Using [http://github.com/h3rb/galvanic](Galvanic) or [http://github.com/h3rb/papi] you can create multiplayer and cloud-based back-ends easily with JSON RESTful web APIs.
+Using [Galvanic](http://github.com/h3rb/galvanic) or [Papi](http://github.com/h3rb/papi) you can create multiplayer and cloud-based back-ends easily with JSON RESTful web APIs.
 
 
-Featured Libraries
-------------------
+#### Featured Libraries
 
 See the file ``lawg/lib/Readme.md``
 
@@ -25,8 +23,7 @@ See the file ``lawg/lib/Readme.md``
 License
 =======
 
-MIT License
------------
+#### MIT License
 
 Copyright 2020-2021 H. Elwood Gilliland III (dba Lost Astronaut Studios)
 
@@ -40,13 +37,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 FAQ
 ===
 
-Publishing
-----------
+#### Publishing
 
 How to publish to the mobile platforms iOS and Android?
-[http://jasonette.com/webcontainer/](Jasonette Web Container)
+[Jasonette Web Container](http://jasonette.com/webcontainer/)
 
 How to publish for desktop and laptop systems?
-[http://electronjs.org](ElectronJS)
+[ElectronJS](http://electronjs.org)
 
 Examples for the above will be provided soon.
