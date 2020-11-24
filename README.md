@@ -10,7 +10,9 @@ including THREEjs, PixiJS, Phaser, and others.
 Designed to be cross-platform friendly, and leveraging web platform middleware, you can create complex 2D and 3D and 2.5D games using some
 of the best open source.
 
-LAWG leverages its own interface to provide multiple-engine and HTML coexistance.
+LAWG leverages its own interface to provide multiple-engine and HTML coexistence.  This means that useful infrastructure for doing complex
+multi-canvas and overlay-HTML interfaces is possible.  It also provides some unification for touch interfaces along with the mouse and
+game controllers.  And, it provides its own HTML5 canvas engine similar to the features of the Lost Astronaut Game Creation Framework in C++.
 
 Using [Galvanic](http://github.com/h3rb/galvanic) or [Papi](http://github.com/h3rb/papi) you can create multiplayer and cloud-based back-ends easily with JSON RESTful web APIs.
 
