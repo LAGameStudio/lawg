@@ -138,6 +138,7 @@ class LARenderers extends LinkedList {
     for ( var i=0; i<this.list.length; i++ ) {
      if ( id != this.list[i].id ) {
       list[j]=this.list[i];
+      this.list[j].OnReindex(j);
      } else {
       this.list[i].Dispose();
      }
