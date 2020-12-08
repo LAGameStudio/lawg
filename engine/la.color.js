@@ -1,6 +1,4 @@
-
-function GetAColor( seed ) {
- var colors = ["Aqua","Aquamarine","Black","Blue","BlueViolet","Brown","BurlyWood","CadetBlue","Chartreuse",
+ var brights = ["Aqua","Aquamarine","Black","Blue","BlueViolet","Brown","BurlyWood","CadetBlue","Chartreuse",
  "Chocolate","Coral","CornflowerBlue","Crimson","Cyan","DarkBlue","DarkCyan","DarkGoldenRod","DarkGray","DarkGrey",
  "DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","DarkOrange","DarkOrchid","DarkRed","DarkSalmon",
  "DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkSlateGrey","DarkTurquoise","DarkViolet","DeepPink",
@@ -16,6 +14,23 @@ function GetAColor( seed ) {
  "Salmon","SandyBrown","SeaGreen","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey",
  "SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","Wheat","Yellow",
  "YellowGreen"];
- return (""+colors[seed%colors.length]).trim();
-}
+ 
+function GetCSSColor( seed ) { return (""+brights[seed%brights.length]).trim(); }
 
+class Crayon {
+ construct( r, g=null, b=null, a=null ) {
+  this.Set(r,g,b,a);
+ }
+ Set( r, g=null, b=null, a=null ) {
+  if ( !g && !b && !a ) {
+   if ( is_int(r) ) this.value=new tinycolor({r:r,g:r,b:r});
+   else this.value=new tinycolor(r);
+  } else if ( g && b && !a ) {
+   if ( is_int(r) && is_int(g) && is_int(b) ) this.value=new tinycolor({r:r,g:g,b:b});
+   else this.value=tinycolor.fromRatio({r:r,g:g,b:b});
+  } else if ( g && b && a ) {
+   if ( is_int(r) && is_int(g) && is_int(b) && is_int(a) ) this.value=new tinycolor({r:r,g:g,b:b,a:a});
+   else this.value=tinycolor.fromRatio({r:r,g:g,b:b,a:a});
+  }
+ }
+};

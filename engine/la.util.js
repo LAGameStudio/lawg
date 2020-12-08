@@ -185,6 +185,8 @@ function is_array(arr) { return Array.isArray(arr); }
 function is_object(o) { if ( typeof o == 'object') return true; return false; }
 function isBoolean(obj) { return obj === true || obj === false || toString.call(obj) === '[object Boolean]'; }
 function is_bool(obj) { return isBoolean(obj); }
+function is_number(o) { if (typeof o === 'number') return true; return false;  }
+function is_int(o) { return Number.isInteger(o); }
 function implode( sep, arr ) {
 	var res="";
 	for ( var i=0; i<arr.length; i++ ) {
