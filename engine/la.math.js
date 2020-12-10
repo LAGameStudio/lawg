@@ -36,6 +36,10 @@ function WITHIN(tx,ty,x,y,w,h)          { return ( tx > x && tx < x+w && ty > y 
 
 function WITHINInclusive(tx,ty,x,y,w,h) { return ( tx >= x && tx <= x+w && ty >= y && ty <= y+h ); }
 
-function rad2deg(radians) {  return radians * (180/Math.PI.toFixed(20));  }
+function rad2deg(radians) {  return radians * (180/PI);  }
+function deg2rad(degrees) { return degrees * (PI/180); }
 
+function LineAngle(x,y,x2,y2) { return Math.atan2( (y2-y), (x2-x) ); }
 function LineAngleDeg(x,y,x2,y2) { return rad2deg(Math.atan2( (y2-y), (x2-x) )); }
+
+function uniform() { return Math.random(); }

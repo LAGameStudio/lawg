@@ -55,3 +55,16 @@ function isfalse(v) {
 	if ( b == 'no' ) return true;
 	return false;
 }
+
+class LFS {
+ constructor() {
+  if (typeof(Storage) !== "undefined") this.supported=true;
+  else this.supported=false;
+ }
+ Get( named ) {
+  return localStorage.getItem(named);
+ }
+ Set( named, value ) {
+  return localStorage.setItem(named);
+ }
+};

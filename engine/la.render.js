@@ -16,6 +16,8 @@ class LARenderer extends ListItem {
      this.twglFrameFunction(time);    
      requestAnimationFrame(render);
     };
+    this.Frame=function(renderer,list){};
+    this.Clear=function(){}; // Clear background function.
   }
   
   ResizeTo( w, h ) {
@@ -38,7 +40,7 @@ class LARenderer extends ListItem {
   }
   
   Background( value ) {
-    
+    this.background=value;
   }
   
   Dispose() {
@@ -84,6 +86,15 @@ class LARenderers extends LinkedList {
         la.display.outer.appendChild(element);
         renderer.element=element;
         renderer.ctx=element.getContext("2d");
+        // Clear canvas
+        renderer.Clear=function() {
+          this.ctx.clearRect(0, 0,la.display.w, la.display.h);
+          this.ctx.rect(0, 0, la.display.w, la.display.h);
+          this.ctx.fillStyle = this.background;
+          this.ctx.fill();
+        }
+        // Per-frame call (customizable)
+        renderer.Frame=function(renderer,list) { renderer.Clear(); };
         console.log(element);
        break;
       case this.HTMLOverlay:  // Adds an HTML Overlay
@@ -131,6 +142,14 @@ class LARenderers extends LinkedList {
     return renderer.id;
   }
   
+  Get( id ) {
+    if ( id instanceof LARenderer ) return id;    
+    for ( var i=0; i<this.list.length; i++ ) {
+     if ( id == this.list[i].id ) return this.list[i];
+    }
+    return null;
+  }
+  
   Drop( id ) {
     if ( id instanceof LARenderer ) id=id.id;
     var list=[];
@@ -152,6 +171,9 @@ class LARenderers extends LinkedList {
     for ( var i=0; i<this.list.length; i++ ) this.list[i].ResizeTo(w,h);
   }
   
+  Frame() {
+    for ( var i=0; i<this.list.length; i++ ) this.list[i].Frame(this.list[i],this.list); 
+  }
   
 };
 

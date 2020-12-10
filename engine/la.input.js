@@ -1,44 +1,65 @@
 // Keyboard Events
 class KeyboardInput {
  constructor() {
+  this.bindings=[];
+  this.locations=["Standard", "Left", "Right", "Numpad", "Mobile", "Joystick"];
   this.Reset();
  }
+ anyDown(key) { for ( var i=0; i<key.state.length; i++ ) if ( key.state[i] ) return true; return false; }
+ getDown(key) {
+  var result="";
+  for ( var i=0; i<key.state.length; i++ ) if ( key.state[i] ) result+=la.input.keyboard.locations[i]+",";
+  return rtrim(result,",");
+ }
  keyboard(keyCode) {
-   var key = {};
-   key.code = keyCode;
-   key.isDown = false;
-   key.isUp = true;
-   key.press = undefined;
-   key.release = undefined;
+   var key = {
+    name: this.GetKeyName(keyCode),
+    code: keyCode,
+    state: [ false, false, false, false, false, false, false, false ],
+    isDown: false,
+    isUp: true,
+    location: false
+   };
+   key.press=undefined;
+   key.release=undefined;
    //The `downHandler`
    key.downHandler = function(event) {
-     if (event.keyCode === key.code) {
+     if ( la.input.keyboard.ignoring ) return;
+     if (event.which === key.code) {
+       key.state[event.location]=true;
+       key.isDown = la.input.keyboard.anyDown(key);
+       key.isUp = !key.isDown;
        if (key.isUp && key.press) key.press();
-       key.isDown = true;
-       key.isUp = false;
-       console.log(key);
+      // console.log(key);
      }
      event.preventDefault();
    };
    //The `upHandler`
    key.upHandler = function(event) {
-     if (event.keyCode === key.code) {
-       if (key.isDown && key.release) key.release();
-       key.isDown = false;
-       key.isUp = true;
-       console.log(key);
+     if ( la.input.keyboard.ignoring ) return;
+     if (event.which === key.code) {
+       key.state[event.location]=false;
+       key.isDown = la.input.keyboard.anyDown(key);
+       key.isUp = !key.isDown;
+       if (key.isUp && key.press) key.press();
+      // console.log(key);
      }
      event.preventDefault();
    };
    //Attach event listeners
-   window.addEventListener(    "keydown", key.downHandler.bind(key), false  );
-   window.addEventListener(    "keyup", key.upHandler.bind(key), false  );
+   key.downListener=window.addEventListener( "keydown", key.downHandler.bind(key), false  );
+   key.upListener=window.addEventListener( "keyup", key.upHandler.bind(key), false  );
+   this.bindings[this.bindings.length]=key;
    return key;
  }
  Reset() {
    this.ignoring=false;
    this.bksp=this.keyboard(8);
-   this.enter=this.keyboard(10);
+   this.tab=this.keyboard(9);
+   this.enter=this.keyboard(13);
+   this.shift=this.keyboard(16);
+   this.ctrl=this.keyboard(17);
+   this.alt=this.keyboard(18);
    this.esc=this.keyboard(27);
    this.space=this.keyboard(32);
    this.left=this.keyboard(37);
@@ -51,19 +72,18 @@ class KeyboardInput {
    this.minus=this.keyboard(45);
    this.period=this.keyboard(46);
    this.slash=this.keyboard(47);
-   this.n0=this.keyboard(48);
-   this.n1=this.keyboard(49);
-   this.n2=this.keyboard(50);
-   this.n3=this.keyboard(51);
-   this.n4=this.keyboard(52);
-   this.n5=this.keyboard(53);
-   this.n6=this.keyboard(54);
-   this.n7=this.keyboard(55);
-   this.n8=this.keyboard(56);
-   this.n9=this.keyboard(57);
+   this.n0=this.keyboard(98);
+   this.n1=this.keyboard(97);
+   this.n2=this.keyboard(98);
+   this.n3=this.keyboard(99);
+   this.n4=this.keyboard(100);
+   this.n5=this.keyboard(101);
+   this.n6=this.keyboard(102);
+   this.n7=this.keyboard(103);
+   this.n8=this.keyboard(104);
+   this.n9=this.keyboard(105);
    this.colon=this.keyboard(59);
    this.equals=this.keyboard(61);
-   /*
    this.A=this.keyboard(65); this.N=this.keyboard(78);
    this.B=this.keyboard(66); this.O=this.keyboard(79);
    this.C=this.keyboard(67); this.P=this.keyboard(80);
@@ -77,28 +97,133 @@ class KeyboardInput {
    this.K=this.keyboard(75); this.X=this.keyboard(88);
    this.L=this.keyboard(76); this.Y=this.keyboard(89);
    this.M=this.keyboard(77); this.Z=this.keyboard(90);
-   */
-   this.lbracket=this.keyboard(91);
-   this.backslash=this.keyboard(92);
-   this.rbracket=this.keyboard(93);
-   this.apostrophe=this.keyboard(94);
-   this.backtick=this.keyboard(96);
-   /*
-   this.a=this.keyboard(97);  this.n=this.keyboard(110);
-   this.b=this.keyboard(98);  this.o=this.keyboard(111);
-   this.c=this.keyboard(99);  this.p=this.keyboard(112);
-   this.d=this.keyboard(100); this.q=this.keyboard(113);
-   this.e=this.keyboard(101); this.r=this.keyboard(114);
-   this.f=this.keyboard(102); this.s=this.keyboard(115);
-   this.g=this.keyboard(103); this.t=this.keyboard(116);
-   this.h=this.keyboard(104); this.u=this.keyboard(117);
-   this.i=this.keyboard(105); this.v=this.keyboard(118);
-   this.j=this.keyboard(106); this.w=this.keyboard(119);
-   this.k=this.keyboard(107); this.x=this.keyboard(120);
-   this.l=this.keyboard(108); this.y=this.keyboard(121);
-   this.m=this.keyboard(109); this.z=this.keyboard(122);  
-   */
+   this.k0=this.keyboard(48);
+   this.k1=this.keyboard(49);
+   this.k2=this.keyboard(50);
+   this.k3=this.keyboard(51);
+   this.k4=this.keyboard(52);
+   this.k5=this.keyboard(53);
+   this.k6=this.keyboard(54);
+   this.k7=this.keyboard(55);
+   this.k8=this.keyboard(56);
+   this.k9=this.keyboard(57);
+   this.lbracket=this.keyboard(219);
+   this.slash=this.keyboard(191);
+   this.backslash=this.keyboard(220);
+   this.rbracket=this.keyboard(221);
+   this.apostrophe=this.keyboard(222);
+   this.backtick=this.keyboard(192);
    this.del=this.keyboard(127);
+   
+ }
+ GetKeyName(code) {
+  switch ( code ) {
+   default: return "unknown ("+code+")";
+   case 8:   return "backspace";
+   case 9:   return "tab";
+   case 13:  return "enter";
+   case 16:  return "shift";
+   case 17:  return "ctrl";
+   case 18:  return "alt";
+   case 19:  return "pause/break";
+   case 20:  return "capslock";
+   case 27:  return "escape";
+   case 33:  return "page:up";
+   case 32:  return "spacebar";
+   case 34:  return "page:down";
+   case 35:  return "end";
+   case 36:  return "home";
+   case 37:  return "arrow:left";
+   case 38:  return "arrow:up";
+   case 39:  return "arrow:right";
+   case 40:  return "arrow:down";
+   case 44:  return "printscreen";
+   case 45:  return "insert";
+   case 46:  return "delete";
+   case 48:  return "0";
+   case 49:  return "1";
+   case 50:  return "2";
+   case 51:  return "3";
+   case 52:  return "4";
+   case 53:  return "5";
+   case 54:  return "6";
+   case 55:  return "7";
+   case 56:  return "8";
+   case 57:  return "9";
+   case 59:  return "; (firefox)";
+   case 61:  return "= (firefox)";
+   case 65:  return "a";
+   case 66:  return "b";
+   case 67:  return "c";
+   case 68:  return "d";
+   case 69:  return "e";
+   case 70:  return "f";
+   case 71:  return "g";
+   case 72:  return "h";
+   case 73:  return "i";
+   case 74:  return "j";
+   case 75:  return "k";
+   case 76:  return "l";
+   case 77:  return "m";
+   case 78:  return "n";
+   case 79:  return "o";
+   case 80:  return "p";
+   case 81:  return "q";
+   case 82:  return "r";
+   case 83:  return "s";
+   case 84:  return "t";
+   case 85:  return "u";
+   case 86:  return "v";
+   case 87:  return "w";
+   case 88:  return "x";
+   case 89:  return "y";
+   case 90:  return "z";
+   case 91:  return "left window key";
+   case 92:  return "right window key";
+   case 93:  return "select";	
+   case 96:  return "numpad0";
+   case 97:  return "numpad1";
+   case 98:  return "numpad2";
+   case 99:  return "numpad3";
+   case 100: return "numpad4";
+   case 101: return "numpad5";
+   case 102: return "numpad6";
+   case 103: return "numpad7";
+   case 104: return "numpad8";
+   case 105: return "numpad9";
+   case 106: return "multiply";
+   case 107: return "add";
+   case 109: return "subtract";
+   case 110: return "decimal";	
+   case 111: return "divide";
+   case 112: return "F1";
+   case 113: return "F2";
+   case 114: return "F3";
+   case 115: return "F4";
+   case 116: return "F5";
+   case 117: return "F6";
+   case 118: return "F7";
+   case 119: return "F8";
+   case 120: return "F9";
+   case 121: return "F10";
+   case 122: return "F11";
+   case 123: return "F12";
+   case 144: return "numlock";
+   case 173: return "subtract (firefox)";
+   case 182: return "MyComputer";
+   case 183: return "MyCalculator";
+   case 186: return ";";
+   case 187: return "=";
+   case 188: return ",";
+   case 189: return "dash";
+   case 190: return ".";
+   case 191: return "/";
+   case 192: return '`';
+   case 219: return "[";
+   case 220: return "\\";
+   case 221: return "]";
+   case 222: return "'"; 
+  }
  }
 };
 
@@ -110,12 +235,27 @@ class LAInput {
     this.beforeGamepadsCycleFunction = function(){};
     this.afterGamepadsCycleFunction = function(){};
     this.InitTouch();
+    this.InitMouse();
     this.ResetKeyboard();
     this.ResetEvents();
     this.mx=-1;
     this.my=-1;
     this.mxd=-1;
     this.myd=-1;
+    this.left=false;
+    this.middle=false;
+    this.right=false;
+    this.MOUSE_BUTTON_LEFT=1;
+    this.MOUSE_BUTTON_MIDDLE=1;
+    this.MOUSE_BUTTON_RIGHT=1;
+    this.cursor="auto";
+    this.valid_cursors=[
+     "auto", "move", "no-drop", "col-resize", "row-resize", "all-scroll", "pointer", "not-allowed", "row-resize",
+     "crosshair", "progress", "wait", "text", "default", "progress", "help", "vertical-text", "inherit",
+     "n-resize", "e-resize", "w-resize", "s-resize", "ne-resize", "nw-resize", "se-resize", "sw-resize", 
+     "none"
+    ];
+    if ( la.config.mouse.OVERRIDE_CONTEXT_MENU ) this.OverrideContextMenu();
   }
   
   UpdateMouse( mx, my, w, h ) {
@@ -123,6 +263,41 @@ class LAInput {
     this.my=my;
     this.mxd=mx/w;
     this.myd=my/h;
+  }
+  
+  Clicking( value, which=1 ) {
+   switch ( which ) {
+    case 1: this.left=value; break;
+    case 2: this.middle=value; break;
+    case 3: this.right=value; break;
+   }
+  }
+  
+  UpdateMouseDown(event) {
+   this.Clicking(true,event.which);
+   this.UpdateMouse(event.offsetX,event.offsetY,la.display.w,la.display.h);
+  }
+  
+  UpdateMouseUp(event) {
+   this.Clicking(false,event.which);
+  }
+  
+  InitMouse() {
+   window.addEventListener("mousemove", function(e){
+    la.input.UpdateMouse(e.offsetX,e.offsetY,la.display.w,la.display.h);
+    la.input.MouseMoved(e);
+    e.preventDefault();
+   },true);
+   $(window).mousedown(function(e){
+    la.input.UpdateMouseDown(e);
+    la.input.MouseDown(e);
+    e.preventDefault();
+   });
+   $(window).mouseup(function(e){
+    la.input.UpdateMouseUp(e);
+    la.input.MouseUp(e);
+    e.preventDefault();
+   });
   }
   
   InitTouch() {
@@ -144,15 +319,15 @@ class LAInput {
    gameControl.on('afterCycle', () => { la.input.afterGamepadsCycleFunction(); } );
    gameControl.on('connect', gamepad => {
     if ( !defined(this.gamepad[gamepad.id]) ) {
-     gamepad.on('button0',  gamepad => { la.input.GamepadButton0Depressed(gamepad); })
-        .before('button0',  gamepad => { la.input.GamepadButton0Pressed(gamepad); })
-         .after('button0',  gamepad => { la.input.GamepadButton0Released(gamepad); });
-     gamepad.on('button1',  gamepad => { la.input.GamepadButton1Depressed(gamepad); })
-        .before('button1',  gamepad => { la.input.GamepadButton1Pressed(gamepad); })
-         .after('button1',  gamepad => { la.input.GamepadButton1Released(gamepad); });
-     gamepad.on('button2',  gamepad => { la.input.GamepadButton2Depressed(gamepad); })
-        .before('button2',  gamepad => { la.input.GamepadButton2Pressed(gamepad); })
-         .after('button2',  gamepad => { la.input.GamepadButton2Released(gamepad); });
+     gamepad.on('button0',  gamepad => { la.input.GamepadButton0Depressed(gamepad); Clicking(true,la.input.MOUSE_BUTTON_LEFT); })
+        .before('button0',  gamepad => { la.input.GamepadButton0Pressed(gamepad); Clicking(true,la.input.MOUSE_BUTTON_LEFT); })
+         .after('button0',  gamepad => { la.input.GamepadButton0Released(gamepad); Clicking(false,la.input.MOUSE_BUTTON_LEFT); });
+     gamepad.on('button1',  gamepad => { la.input.GamepadButton1Depressed(gamepad); Clicking(true,la.input.MOUSE_BUTTON_MIDDLE); })
+        .before('button1',  gamepad => { la.input.GamepadButton1Pressed(gamepad); Clicking(true,la.input.MOUSE_BUTTON_MIDDLE); })
+         .after('button1',  gamepad => { la.input.GamepadButton1Released(gamepad); Clicking(false,la.input.MOUSE_BUTTON_MIDDLE); });
+     gamepad.on('button2',  gamepad => { la.input.GamepadButton2Depressed(gamepad); Clicking(true,la.input.MOUSE_BUTTON_RIGHT); })
+        .before('button2',  gamepad => { la.input.GamepadButton2Pressed(gamepad); Clicking(true,la.input.MOUSE_BUTTON_RIGHT); })
+         .after('button2',  gamepad => { la.input.GamepadButton2Released(gamepad); Clicking(false,la.input.MOUSE_BUTTON_RIGHT); });
      gamepad.on('button3',  gamepad => { la.input.GamepadButton3Depressed(gamepad); })
         .before('button3',  gamepad => { la.input.GamepadButton3Pressed(gamepad); })
          .after('button3',  gamepad => { la.input.GamepadButton3Released(gamepad); });
@@ -353,6 +528,35 @@ class LAInput {
     this.TouchLeft = function (event) {};
     this.TouchUp = function (event) {};
     this.TouchDown = function (event) {};
+    this.MouseUp = function (event) {};
+    this.MouseDown = function (event) {};
+    this.MouseMoved = function (event) {};
+  }
+  
+  SetCursor( name ) {
+   var found=false;
+   for ( var i=0; i<this.valid_cursors.length; i++ ) if ( name == this.valid_cursors[i] ) { found=true; break; }
+   if ( !found ) {
+    console.log("la.input.SetCursor(`"+name+"`) is invalid, valid cursors are: ");
+    console.log(this.valid_cursors);
+    return;
+   }
+   this.cursor=name;
+   document.body.style.cursor=this.cursor;
+  }
+  
+  HideCursor() {
+   document.body.style.cursor="none";
+  }
+  
+  ShowCursor() {
+   SetCursor(this.cursor);
+  }
+  
+  OverrideContextMenu() {
+   document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+   }, false);
   }
   
 };

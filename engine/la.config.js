@@ -9,7 +9,9 @@ class LAConfig {
       html5PoolSize: 10,
       autoSuspend: true,
     };
-    this.global={};
+    this.mouse = {
+      OVERRIDE_CONTEXT_MENU:true
+    };
     this.touch = {
      SWIPE_THRESHOLD:100, //  (milliseconds)
      DBL_TAP_THRESHOLD:200, // range of time in which a dbltap event could be detected,
@@ -19,6 +21,14 @@ class LAConfig {
      JUST_ON_TOUCH_DEVICES:true, //  ( decide whether you want to use the Tocca.js events only on the touch devices )
      USE_JQUERY:false //  ( will not use jQuery events, even if jQuery is detected )     
     };
+    this.animation = {
+      FRAMERATE: 0 // 0 means "as fast as optimal, try for 60FPS", otherwise values are in "frames per second", 0 is probably best value, and aims for 60fps
+    };
+    
+    // Global values
+    this.global={ frame: 0, paused: false };
+    var d = new Date();
+    this.global.started= d.getMilliseconds();
   }
   // Updates (or initializes) states for global settings.
   Update() {
@@ -35,6 +45,14 @@ class LAConfig {
      tapPrecision: la.config.touch.TAP_PRECISION,
      justTouchEvents: la.config.touch.JUST_ON_TOUCH_DEVICES      
     });
+  }
+  Frame() {
+    var d = new Date();
+    this.global.time = d.getMilliseconds();
+    this.global.elapsed = this.global.time-this.global.started;
+    this.global.expired = this.global.elapsed / 1000.0;
+    this.global.frame+=1;
+    if ( this.global.frame >  Number.MAX_SAFE_INTEGER-1 ) this.global.frame=0;
   }
 };
 

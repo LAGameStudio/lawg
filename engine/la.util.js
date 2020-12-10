@@ -178,8 +178,10 @@ function passCheckFun( event, id="password-strength-text" ) {
 function isset(obj,elem) { return defined(obj) && obj.hasOwnProperty(elem); }
 function var_dump(a,b=null) { if ( b ) { console.log(a); console.log(b); } else console.log(a); }
 function defined(objele) { try { result= (typeof objele !== 'undefined'); } catch(e) { result=false; } return result; }
+function classname(o) { return typeof o == "object" ? o.constructor.name : false; }
 function isnull(obj) { return (obj !== null); }
 function int(a) { return parseInt(a); }
+function explode( sep, str ) { return str.split(sep); }
 function implode( sep, arr ) { var res=""; for ( var i=0; i<arr.length; i++ ) { res+=arr[i]; if ( i != arr.length -1 ) res+=sep; } return res; }
 function is_array(arr) { return Array.isArray(arr); }
 function is_object(o) { if ( typeof o == 'object') return true; return false; }
@@ -187,13 +189,20 @@ function isBoolean(obj) { return obj === true || obj === false || toString.call(
 function is_bool(obj) { return isBoolean(obj); }
 function is_number(o) { if (typeof o === 'number') return true; return false;  }
 function is_int(o) { return Number.isInteger(o); }
-function implode( sep, arr ) {
-	var res="";
-	for ( var i=0; i<arr.length; i++ ) {
-		res+=arr[i];
-		if ( i != arr.length -1 ) res+=sep; 
-	}
-	return res;
+function rtrim (str, charlist) {
+  //  discuss at: https://locutus.io/php/rtrim/
+  // original by: Kevin van Zonneveld (https://kvz.io)
+  //    input by: Erkekjetter
+  //    input by: rem
+  // improved by: Kevin van Zonneveld (https://kvz.io)
+  // bugfixed by: Onno Marsman (https://twitter.com/onnomarsman)
+  // bugfixed by: Brett Zamir (https://brett-zamir.me)
+  //   example 1: rtrim('    Kevin van Zonneveld    ')
+  //   returns 1: '    Kevin van Zonneveld'
+  charlist = !charlist ? ' \\s\u00A0' : (charlist + '')
+    .replace(/([[\]().?/*{}+$^:])/g, '\\$1')
+  const re = new RegExp('[' + charlist + ']+$', 'g')
+  return (str + '').replace(re, '')
 }
 
 // human file size
@@ -401,6 +410,82 @@ function MMDDtoDDMM(ds, sep="-") {
  return parts[1]+sep+parts[0]+sep+parts[2];
 }
 
+//// Canvas and multimedia helpers
+
+// Adapted from canvas-context  https://github.com/dmnsgn/canvas-context
+
+function createCanvasContext(options = {}) {
+
+const contextTypeList = [
+  "2d",
+  "webgl",
+  "experimental-webgl",
+  "webgl2",
+  "webgl2-compute",
+  "bitmaprenderer",
+  "gpupresent"
+];
+// Get options and set defaults
+  if ( !defined(options.contextType) ) options.contextType="2d";
+  if ( !defined(options.width) ) options.width=100;
+  if ( !defined(options.height) ) options.height=100;
+  if ( !defined(options.offscreen) ) options.offscreen=false;
+  if ( !defined(options.contextAttributes) ) options.contextAttributes={};
+  if ( !defined(options.canvas) ) options.canvas=null;
+
+  // Check contextType is valid
+  if (!contextTypeList.includes(options.contextType)) {
+    throw new TypeError(`Unknown contextType: "${options.contextType}"`);
+  }
+
+  // Return in Node or in a Worker unless a canvas is provided
+  // See https://github.com/Automattic/node-canvas for an example
+  if (typeof window === "undefined" && !options.canvas) {
+    return null;
+  }
+
+  // Get offscreen canvas if requested and available
+  const e = options.canvas || document.createElement("canvas");
+  const c = (options.offscreen) && "OffscreenCanvas" in window ? e.transferControlToOffscreen() : e;
+
+  // Set canvas dimensions (default to 300 in browsers)
+  if (Number.isInteger(options.width) && options.width >= 0) c.width = options.width;
+  if (Number.isInteger(options.height) && options.height >= 0) c.height = options.height;
+  // Get the context with specified attributes and handle experimental-webgl
+  let context;
+  try { context = c.getContext(options.contextType, options.contextAttributes)
+   || (options.contextType === "webgl" ? c.getContext("experimental-webgl", options.contextAttributes) : null);
+  } catch (error) { context = null; }
+  return { c, context };
+}
+
+// tintImage from https://github.com/dmnsgn/canvas-tint-image
+
+var tintImageContext = createCanvasContext({ width: 100, height: 100 });
+
+function tintImage(image, color, opacity = 0.5) {
+  if (!tintImageContext) {
+    const { context: c } = canvasContext("2d", {
+      width: image.width,
+      height: image.height,
+    });
+    tintImageContext = c;
+  } else {
+    context.canvas.width = image.width;
+    context.canvas.height = image.height;
+  }
+  tintImageContext.save();
+  tintImageContext.fillStyle = color;
+  tintImageContext.globalAlpha = opacity;
+  tintImageContext.fillRect(0, 0, tintImageContext.canvas.width, tintImageContext.canvas.height);
+  tintImageContext.globalCompositeOperation = "destination-atop";
+  tintImageContext.globalAlpha = 1;
+  tintImageContext.drawImage(image, 0, 0);
+  tintImageContext.restore();
+
+  return tintImageContext.canvas;
+}
+
 
 
 //// List Helpers, adapted from https://github.com/h3rb/ZeroTypesSFL
@@ -577,5 +662,9 @@ class LinkedList {
    list[j].OnReindex(j);
    list[j].index=j;
   }  
+ }
+ 
+ Sort(fun) {
+  this.list.sort(fun);
  }
 };

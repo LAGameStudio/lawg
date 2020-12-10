@@ -30,6 +30,7 @@
     <script type="text/javascript" src="engine/la.display.js"></script>
     <script type="text/javascript" src="engine/la.input.js"></script>
     <script type="text/javascript" src="engine/la.color.js"></script>
+    <script type="text/javascript" src="engine/la.art.js"></script>
     <script type="text/javascript" src="engine/la.geo.js"></script>
     <script type="text/javascript" src="engine/la.render.js"></script>
     <script type="text/javascript" src="engine/la.events.js"></script>
@@ -37,7 +38,7 @@
     <script type="text/javascript" src="engine/la.framework.js"></script>
     <!-- required style manipulations -->
     <style>
-      body { padding:0; margin: 0; overflow: none; width:100%; height:100%; }   /* Eliminates window padding and scroll bars */
+      body { padding:0; margin: 0; overflow: hidden; width:100%; height:100%; }   /* Eliminates window padding and scroll bars */
     </style>
     <!-- your app -->
     <!-- -->
@@ -50,4 +51,7 @@
      la.renderers.Add(la.renderers.HTML5);
     });
   </script>
+    <!--script type="text/javascript" src="tests/test.image.mouse.js"></script-->
+    <script type="text/javascript" src="tests/test.inputstates.js"></script>
+    
 </html>
