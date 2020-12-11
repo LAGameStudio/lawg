@@ -44,12 +44,12 @@ class LAAudio {
   }
   
   Load( file_or_files_or_json ) {
-    var a=is_object(file_or_files_or_json) ? new Howl(file_or_files_or_json) : new Howl({ src: assure_string_array(file_or_files_or_json) });
+    let a=is_object(file_or_files_or_json) ? new Howl(file_or_files_or_json) : new Howl({ src: assure_string_array(file_or_files_or_json) });
     return a;
   }  
   
   Sound( file_or_files_or_json ) {
-    var a=is_object(file_or_files_or_json) ? new Howl(file_or_files_or_json) : new Howl({ src: assure_string_array(file_or_files_or_json) });
+    let a=is_object(file_or_files_or_json) ? new Howl(file_or_files_or_json) : new Howl({ src: assure_string_array(file_or_files_or_json) });
     return a;
   }
   
@@ -73,7 +73,7 @@ class LAAudio {
   }
 
   PlayLimited( limit, unique_string, file_or_files_or_json ) {
-    var a=null;
+    let a=null;
     if ( defined(this.limited_howls[unique_string]) ) {
       a=this.limited_howls[unique_string];
       a.playing_limit=limit;

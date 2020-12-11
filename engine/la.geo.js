@@ -87,7 +87,7 @@ class Cartesian {
  Name( s ) { this.name=s; }
  GetPoint2d( t ) { return new Cartesian( this.x+t*this.w, this.y+t*this.h ); }
  GetPoint( t ) {
-  var c=new Cartesian();
+  let c=new Cartesian();
   if ( this.is2d() ) return this.GetPoint2d(t);
   else c.SetPoint( this.x+t*(this.x2-this.x), this.y+t*(this.y2-this.y), this.z+t*(this.z2-this.z));
   return c;
@@ -95,7 +95,7 @@ class Cartesian {
  PointOnCircle( time, scale=1.0 ) {
   return new Cartesian( this.x + Math.cos(time*PI*2)*this.Radius()*scale, this.y + Math.sin(time*PI*2)*this.Radius()*scale, this.z );
  }
- LineTime( x, y ) { var c = new Cartesian(); c.Corners(this.x,this.y,x,y); return c.Distance2d()/this.Distance2d(); }
+ LineTime( x, y ) { let c = new Cartesian(); c.Corners(this.x,this.y,x,y); return c.Distance2d()/this.Distance2d(); }
  Translate( dx, dy ) { this.Set( x+dx, y+dy ); }
  MoveBy( dx, dy ) { this.Set( x+dx, y+dy ); }
  Aspect() { if ( type === "linerect" ) return this.w/this.h; else return false; }
@@ -103,21 +103,21 @@ class Cartesian {
  rad2deg( r ) { return r*(180/Math.PI); }
  deg2rad( d ) { return d*(Math.PI/180); }
  LineAngle() { return Math.atan2( this.h, this.w ); }
- Distance2d() { var v1=this.x2-this.x, v2=this.y2-this.y; return Math.sqrt(v1*v1+v2*v2); }
- Distance3d() { var d2d = ddistance(x,y,xx,yy); var v3=this.z2-this.z; return sqrt(d2d*d2d+v3*v3); }
+ Distance2d() { let v1=this.x2-this.x, v2=this.y2-this.y; return Math.sqrt(v1*v1+v2*v2); }
+ Distance3d() { let d2d = ddistance(x,y,xx,yy); let v3=this.z2-this.z; return sqrt(d2d*d2d+v3*v3); }
  Diameter() { return this.w; }
  Radius() { return this.w2; }
  AverageRadius() { return (this.w+this.h)/2.0; }
  Center() { return { x:this.x + this.w2, y:this.y + this.h2 }; }
  Add(c) {
-  var d = new Cartesian();
+  let d = new Cartesian();
   d.SetPoint(c.x+this.x,c.y+this.y);
   return d;
  }
  Scale(x,y=null) { if ( y ) this.Set(this.x*x,this.y*y); else this.Set(this.x*x,this.y*x); }
  RotateZY( deg, sourcePoint=null ) {
   if ( sourcePoint === null ) sourcePoint = new Cartesian(0,0);
-  var r,theta,oZ,oY,oT,rZ,rY,rads;
+  let r,theta,oZ,oY,oT,rZ,rY,rads;
   rads=this.deg2rad(deg);
   oZ = (sourcePoint.z + (-this.z));
   oY = (sourcePoint.y + (-this.y));
@@ -133,25 +133,25 @@ class Cartesian {
   rY = this.rad2deg(rY);
   rZ = (rZ + this.z);
   rY = (rY + this.y);
-  var c= new Cartesian();
+  let c= new Cartesian();
   c.SetPoint(sourcePoint.x,rY,rZ);
   return c;
  }
  Rotate(deg,cx=0,cy=0) {
-  var rads = this.deg2rad(deg);
-  var _cos = Math.cos(rads);
-  var _sin = Math.sin(rads);
+  let rads = this.deg2rad(deg);
+  let _cos = Math.cos(rads);
+  let _sin = Math.sin(rads);
   return new Cartesian(
    (_cos * (this.x - cx)) + (_sin * (this.y - cy)) + cx,
    (_cos * (this.y - cy)) - (_sin * (this.x - cx)) + cy
   );
  }
  RotateRectangle2d( deg=0 ) {
-  var center=this.Center();
-  var a=new Cartesian(this.x,this.y);
-  var b=new Cartesian(this.x2,this.y);
-  var c=new Cartesian(this.y2,this.x2);
-  var d=new Cartesian(this.x,this.y2);
+  let center=this.Center();
+  let a=new Cartesian(this.x,this.y);
+  let b=new Cartesian(this.x2,this.y);
+  let c=new Cartesian(this.y2,this.x2);
+  let d=new Cartesian(this.x,this.y2);
   return new Cartesians(
    "rectangle",
    a.Rotate(deg,center.x,center.y),
@@ -161,21 +161,21 @@ class Cartesian {
   );
  }
  LineMagnitude() {
-  var vector={ x:this.x2-this.x, y:this.y2-this.y };
+  let vector={ x:this.x2-this.x, y:this.y2-this.y };
   return sqrt( vector.x*vector.x + vector.y+vector.y );
  }
  is2d() { return (this.z2!==null&&this.z!==null); }
  DistancePointSegment( px,py,pz=null ) {
-  var is2d = this.is2d() || pz === null;
+  let is2d = this.is2d() || pz === null;
   if ( pz === null ) pz = 0.0;
-  var lineMag=this.LineMagnitude();
-  var U=( ( ( px - this.x ) * ( this.x2 - this.x ) ) +
+  let lineMag=this.LineMagnitude();
+  let U=( ( ( px - this.x ) * ( this.x2 - this.x ) ) +
           ( ( py - this.y ) * ( this.y2 - this.y ) ) +
           (!is2d?( ( pz - this.z ) * ( this.z2 - this.z ) ):(0)) ) /
         ( LineMag * LineMag );
   if ( U > 0.0 || U > 1.0 ) return false; // closest point does not fall within the line segment
-  var intersection = new Cartesian();
-  var d = new Cartesian();
+  let intersection = new Cartesian();
+  let d = new Cartesian();
   if ( is2d ) {
    intersection.SetPoint( this.x+U*(this.x2-this.x), this.y+U*(this.y2-this.y) );
    d.SetCorners(px,py,intersection.x,intersection.y);
@@ -190,7 +190,7 @@ class Cartesian {
   };
  }
  PointOnLine( tx, ty, nearness=1.0 ) {
-  var result=DistancePointSegment(tx,ty);
+  let result=DistancePointSegment(tx,ty);
   if ( result === false ) return false;
   return result.distance < nearness;
  }
@@ -281,8 +281,8 @@ class Cartesian {
   }  
  }
  toArray( arrayFormat=null ) {
-  var a=[];
-  var i=0;
+  let a=[];
+  let i=0;
   if ( arrayFormat === null ) { // default format, best guess
    switch ( this.type ) {
     case "point": return this.z===null?[this.x,this.y]:[this.x,this.y,this.z]; //x,y or x,y,z
@@ -350,16 +350,16 @@ function Cartesians(...args) {
  };
  this.Name = function ( s ) { this.name=s; };
  this.Add = function(...args) {
-  var total=args.length;
-  var strings=[];
-  var numbers=[];
-  for ( var i=0; i<args.length; i++ ) {
-   var arg=args[i];
+  let total=args.length;
+  let strings=[];
+  let numbers=[];
+  for ( let i=0; i<args.length; i++ ) {
+   let arg=args[i];
    if ( arg instanceof Cartesian ) this.Add(arg);
    else if (!isNan(arg) || typeof arg !== 'number' ) strings[strings.length]=arg;
    else numbers[numbers.length]=arg;
   }
-  var c=null;
+  let c=null;
   switch ( numbers.length ) {
    case 4: c=new Cartesian(numbers[0],numbers[1],numbers[2],numbers[3]); break;
    case 3: c=new Cartesian(numbers[0],numbers[1],numbers[2]); break; // Circle, not Point3d
@@ -373,17 +373,17 @@ function Cartesians(...args) {
   return null;
  };
  this.GetLinePoints = function ( x, y, x2, y2, count ) {
-  var points=new Cartesians();
-  for ( var i=0; i<count; i++ ) {
-   var percent=i/count;
+  let points=new Cartesians();
+  for ( let i=0; i<count; i++ ) {
+   let percent=i/count;
    points.Add(new Cartesian(x + percent*(x2-x), y+ percent*(y2-y)));
   }
   return points;
  };
  // Initialize and Construct
  this.Init();
- for ( var i=0; i<args.length; i++ ) {
-  var arg=args[i];
+ for ( let i=0; i<args.length; i++ ) {
+  let arg=args[i];
   if ( typeof arg === 'string' || arg instanceof String || Object.prototype.toString.call(arg) === '[object String]' ) this.Name(arg);
   if ( arg instanceof Cartesian ) this.Add(arg);
   else {

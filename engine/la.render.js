@@ -24,8 +24,8 @@ class LARenderer extends ListItem {
   
   ResizeTo( w, h ) {
 //    console.log("la.renderers.["+this.element.id+"].ResizeTo("+w+","+h+")");
-    var oldw=this.w;
-    var oldh=this.h;
+    let oldw=this.w;
+    let oldh=this.h;
     this.w=w;
     this.h=h;
     if ( this.element ) {
@@ -69,13 +69,14 @@ class LARenderers extends LinkedList {
   
   Add(name=null,stage_type=0) {
     if ( name == null ) name="Stage "+this.list.length+1;
-    var renderer=new LARenderer();
+    let renderer=new LARenderer();
     renderer.id=this.unique_id;
     this.unique_id++;
     renderer.index=this.list.length;
+    let element=null;
     switch ( stage_type ) {
       case this.HTML5: // Installs a standard HTML5 canvas
-        var element=document.createElement("canvas");
+        element=document.createElement("canvas");
         element.id="la-render-"+renderer.id;
         element.style.width=la.display.w+"px";
         element.style.height=la.display.h+"px";
@@ -103,7 +104,7 @@ class LARenderers extends LinkedList {
       case this.HTMLOverlay:  // Adds an HTML Overlay
        break;
       case this.THREEjs: // Uses ThreeJS to add a canvas
-        var element=document.createElement("div");
+        element=document.createElement("div");
         element.id="la-render-"+renderer.id;
         element.style.width=la.display.w+"px";
         element.style.height=la.display.h+"px";
@@ -116,14 +117,14 @@ class LARenderers extends LinkedList {
         element.position="static";
         la.display.outer.appendChild(element);
         renderer.element=element;
-        var three = new THREE.WebGLRenderer( { alpha: true } );
+        let three = new THREE.WebGLRenderer( { alpha: true } );
         three.setClearColor( 0x000000, 0 );
         renderer.three=three;
         renderer.element.appendChild(three);
         console.log(element);
        break;
       case this.TWGL:
-        var element=document.createElement("canvas");
+        element=document.createElement("canvas");
         element.id="la-render-"+renderer.id;
         element.style.width=la.display.w+"px";
         element.style.height=la.display.h+"px";
@@ -147,7 +148,7 @@ class LARenderers extends LinkedList {
   
   Get( id ) {
     if ( id instanceof LARenderer ) return id;    
-    for ( var i=0; i<this.list.length; i++ ) {
+    for ( let i=0; i<this.list.length; i++ ) {
      if ( id == this.list[i].id ) return this.list[i];
     }
     return null;
@@ -155,9 +156,9 @@ class LARenderers extends LinkedList {
   
   Drop( id ) {
     if ( id instanceof LARenderer ) id=id.id;
-    var list=[];
-    var j=0;
-    for ( var i=0; i<this.list.length; i++ ) {
+    let list=[];
+    let j=0;
+    for ( let i=0; i<this.list.length; i++ ) {
      if ( id != this.list[i].id ) {
       list[j]=this.list[i];
       this.list[j].OnReindex(j);
@@ -171,11 +172,11 @@ class LARenderers extends LinkedList {
   ResizeTo( w, h ) {
 //    console.log("la.renderers.ResizeTo("+w+","+h+")");
 //    console.log(this.list);
-    for ( var i=0; i<this.list.length; i++ ) this.list[i].ResizeTo(w,h);
+    for ( let i=0; i<this.list.length; i++ ) this.list[i].ResizeTo(w,h);
   }
   
   Frame() {
-    for ( var i=0; i<this.list.length; i++ ) this.list[i].Frame(this.list[i],this.list); 
+    for ( let i=0; i<this.list.length; i++ ) this.list[i].Frame(this.list[i],this.list); 
   }
   
 };

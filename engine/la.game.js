@@ -24,10 +24,10 @@ class Entities extends LinkedList {
   }
   Render() {
     this.Pre();
-    for ( var i =0; i<this.list.length; i++ ) this.list[i].Render(this);
+    for ( let i =0; i<this.list.length; i++ ) this.list[i].Render(this);
     this.Post();
   }
   Between() {
-    for ( var i =0; i<this.list.length; i++ ) this.list[i].Between(this);
+    for ( let i =0; i<this.list.length; i++ ) this.list[i].Between(this);
   }
 };

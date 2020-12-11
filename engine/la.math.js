@@ -10,13 +10,13 @@
  * @return {number} 		distance between given points
  */
 Math.getDistance = function( x1, y1, x2, y2 ) {
-	var	xs = x2 - x1, ys = y2 - y1;	
+	let	xs = x2 - x1, ys = y2 - y1;	
 	xs *= xs;
 	ys *= ys;
 	return Math.sqrt( xs + ys );
 };
 
-var PI=Math.PI.toFixed(20);
+let PI=Math.PI.toFixed(20);
 
 function fmod(num,modulus) { return ((num<0) ? Math.abs(modulus) : 0) + (num % modulus); }
 

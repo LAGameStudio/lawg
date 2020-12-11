@@ -11,7 +11,7 @@ function defaultUnmapForm(data) { return data; }
 
 function Demodelize( model, unmapFunc=defaultUnmapForm, completionFunc=api.EmptyFunction, prefix="jsapp-model" ) {
  console.log(model);
-	var data=UnpackForm(model,prefix);
+	let data=UnpackForm(model,prefix);
 	console.log(data);
 	if ( data.error ) Warn(data.error.message);
 	else app.api.Modify("Program", data.id, 
@@ -114,7 +114,7 @@ function Demodelize( model, unmapFunc=defaultUnmapForm, completionFunc=api.Empty
 var html="",prehtml="",posthtml="",afterlabel="", inlabel="";
 var pfPrototypes={};
 function PackForm( model, prefix="jsapp-model", keepPrototypes=false ) {
- var property=prefix.replaceAll("-","");
+ let property=prefix.replaceAll("-","");
  if ( !keepPrototypes || !defined(pfPrototypes[property]) ) pfPrototypes[property]=[];
  html="";
  html='<table width="100%">';
@@ -123,14 +123,14 @@ function PackForm( model, prefix="jsapp-model", keepPrototypes=false ) {
   afterlabel="";
   prehtml="";
   posthtml="";
-	 var n = (item.name?item.name:index);
-	 var i = prefix+'-'+slugify(n);
-	 var v = (defined(item.value)?item.value:"");
-	 var p = (item.hint?item.hint:"");
+	 let n = (item.name?item.name:index);
+	 let i = prefix+'-'+slugify(n);
+	 let v = (defined(item.value)?item.value:"");
+	 let p = (item.hint?item.hint:"");
 	 if ( item.type === "markdown" || item.type === "text" ) html+='<tr><td>';
 	 else html+='<tr id="'+i+'-wrapper"><td>';
   if ( defined(item.caption) ) {
-   var content="",where="after",tag="small";
+   let content="",where="after",tag="small";
    if ( is_string(item.caption) ) {
     content=item.caption;
    } else if ( defined(item.caption.html) ) {
@@ -138,7 +138,7 @@ function PackForm( model, prefix="jsapp-model", keepPrototypes=false ) {
     if ( defined(item.caption.where) ) where=item.caption.where;
     if ( defined(item.caption.tag) ) tag=item.caption.tag;
    }
-   var caption=div((tag?('<'+tag+(defined(item.caption.css)?' class="'+item.caption.css+'"':'')+(defined(item.caption.style)?' style="'+item.caption.style+'"':'')+'>'):'')+content+(tag?('</'+tag+'>'):''));
+   let caption=div((tag?('<'+tag+(defined(item.caption.css)?' class="'+item.caption.css+'"':'')+(defined(item.caption.style)?' style="'+item.caption.style+'"':'')+'>'):'')+content+(tag?('</'+tag+'>'):''));
    switch ( where ) {
     case "label": inlabel+=caption; break;
     case "afterlabel": afterlabel+=caption; break;
@@ -180,7 +180,7 @@ function PackForm( model, prefix="jsapp-model", keepPrototypes=false ) {
    html+=posthtml;
 		 if ( item.list ) {
 			 html+='<datalist id="'+i+'-datalist">';
-			 for( var j=0; j<item.list.length; j++ ) {
+			 for( let j=0; j<item.list.length; j++ ) {
 			 	html+=isString(item.list[j])?'<option value="'+item.list[j]+'">':'<option value="'+item.list[j].value+'">'+item.list[j].text;
 			 }
 			 html+='</datalist>';
@@ -206,7 +206,7 @@ function PackForm( model, prefix="jsapp-model", keepPrototypes=false ) {
    html+=posthtml;
 		 if ( item.list ) {
 			 html+='<datalist id="'+i+'-datalist">';
-			 for( var j=0; j<item.list.length; j++ ) {
+			 for( let j=0; j<item.list.length; j++ ) {
 			 	html+=isString(item.list[j])?'<option value="'+item.list[j]+'">':'<option value="'+item.list[j].value+'">'+item.list[j].text;
 			 }
 			 html+='</datalist>';
@@ -224,7 +224,7 @@ function PackForm( model, prefix="jsapp-model", keepPrototypes=false ) {
 		 html+='/>';
 		 if ( item.list ) {
 			 html+='<datalist id="'+i+'-datalist">';
-		  for( var j=0; j<item.list.length; j++ ) {
+		  for( let j=0; j<item.list.length; j++ ) {
 		  	html+=isString(item.list[j])?'<option value="'+item.list[j]+'">':'<option value="'+item.list[j].value+'">'+item.list[j].text;
 		  }
 			 html+='</datalist>';
@@ -266,11 +266,11 @@ function PackForm( model, prefix="jsapp-model", keepPrototypes=false ) {
    if ( defined(item.switch) ) html+='<span class="'+(item.switch===true?"slider":item.switch)+'"></span>';
    html+=posthtml;
 	 } else if ( item.type === "extendable" || item.type === "extend" ) {
-   var p=pfPrototypes[property].length;
+   let p=pfPrototypes[property].length;
    pfPrototypes[property][p]=item;
-   var outer=i;
-   var add=(item.add?item.add:faicon("fa-plus"));
-   var addcss=(item.addcss?item.addcss:"form-extendable-add");
+   let outer=i;
+   let add=(item.add?item.add:faicon("fa-plus"));
+   let addcss=(item.addcss?item.addcss:"form-extendable-add");
    html+='</td><td></td></tr><tr><td colspan=2>'+(defined(item.before)?item.before:'')+div(
     hrefbtn(add,"packFormExtendAdd('"+prefix+"','"+outer+"')",addcss,outer+"-addbtn"),
     item.css?item.css:"", outer, null, null, [
@@ -289,16 +289,16 @@ function PackForm( model, prefix="jsapp-model", keepPrototypes=false ) {
 }
 
 function packFormExtendClose( outer, itemNumber, closeFirst=false ) {
- var wrapper=Get(outer);
- var counter=parseInt($(wrapper).attr("pf-counter"));
- var prototype=parseInt($(wrapper).attr("pf-prototype"));
- var inner=outer+"-inner-"+itemNumber;
- var ele=Get( inner );
+ let wrapper=Get(outer);
+ let counter=parseInt($(wrapper).attr("pf-counter"));
+ let prototype=parseInt($(wrapper).attr("pf-prototype"));
+ let inner=outer+"-inner-"+itemNumber;
+ let ele=Get( inner );
  ele.parentNode.removeChild(ele);
  counter--;
  $(wrapper).attr("pf-counter",counter);
- var elements=document.querySelectorAll('[pf-outer="'+outer+'"]');
- var i=1;
+ let elements=document.querySelectorAll('[pf-outer="'+outer+'"]');
+ let i=1;
  elements.forEach(function(e) {
   $(e).attr("pf-number",i);
   i++;
@@ -307,17 +307,17 @@ function packFormExtendClose( outer, itemNumber, closeFirst=false ) {
 }
 
 function packFormExtendAdd( prefix, outer, calledDuringCreate=false ) {
- var property=prefix.replaceAll("-","");
+ let property=prefix.replaceAll("-","");
 // console.log(pfPrototypes[property]);
 // console.log(outer);
- var wrapper=Get(outer);
- var counter=parseInt($(wrapper).attr("pf-counter"));
- var prototype=parseInt($(wrapper).attr("pf-prototype"));
+ let wrapper=Get(outer);
+ let counter=parseInt($(wrapper).attr("pf-counter"));
+ let prototype=parseInt($(wrapper).attr("pf-prototype"));
 // console.log("Prototype: "+prototype);
- var item=pfPrototypes[property][prototype];
- var closebtn="";
- var makeCloseButton=false;
- var disableAddButton=false;
+ let item=pfPrototypes[property][prototype];
+ let closebtn="";
+ let makeCloseButton=false;
+ let disableAddButton=false;
  if ( defined(item.limit) ) {
   if ( item.limit != 0 ) {
    if ( item.limit <= counter ) makeCloseButton=true;
@@ -329,13 +329,13 @@ function packFormExtendAdd( prefix, outer, calledDuringCreate=false ) {
   else makeCloseButton=true;
  }
  counter++;
- var inner=outer+"-inner-"+counter;
+ let inner=outer+"-inner-"+counter;
  if ( makeCloseButton ) {
-  var close=(item.close?item.close:faicon("fa-close"));
-  var closecss=(item.closecss?item.closecss:"form-extendable-close");
+  let close=(item.close?item.close:faicon("fa-close"));
+  let closecss=(item.closecss?item.closecss:"form-extendable-close");
   closebtn=div(hrefbtn(close,"packFormExtendClose('"+outer+"',"+counter+","+(item.closefirst?"true":"false")+")",closecss),null,outer+"-closer");
  }
- var html=div(
+ let html=div(
   (item.closebefore === true ? closebtn : "")
   +(item.title?item.title.replaceAll("###",counter):"")
   +div( PackForm( item.model, inner, true ),
@@ -350,107 +350,107 @@ function packFormExtendAdd( prefix, outer, calledDuringCreate=false ) {
  );
  $(wrapper).attr("pf-counter",counter);
  $(wrapper).append(html);
- var addbtn=Get(outer+"-addbtn");
+ let addbtn=Get(outer+"-addbtn");
  addbtn.parentNode.removeChild(addbtn);
- var add=(item.add?item.add:faicon("fa-plus"));
- var addcss=(item.addcss?item.addcss:"form-extendable-add");
+ let add=(item.add?item.add:faicon("fa-plus"));
+ let addcss=(item.addcss?item.addcss:"form-extendable-add");
  $(wrapper).append( hrefbtn(add,"packFormExtendAdd('"+prefix+"','"+outer+"')",addcss,outer+"-addbtn") );
  jQueryForm( item.model, inner );
  if ( !calledDuringCreate ) scrollElement(Get(inner));
 }
 
 function enableByValue( ele ) {
-	var item=ele.formitem;
-	var n = (item.name?item.name:index);
-	var i = ele.id;
-	var p = (item.hint?item.hint:"");
+	let item=ele.formitem;
+	let n = (item.name?item.name:index);
+	let i = ele.id;
+	let p = (item.hint?item.hint:"");
 	if ( !( item.type === 'radio'
       || item.type === 'select') ) return;
 	if ( item.type === 'radio' ) {
-  var value=null;
-  var value_domid=null;
-  var opt_list=[];
-	 for ( var i=0; i<item.options.length; i++ ) {
- 	 var domid=i+'-'+num;
+  let value=null;
+  let value_domid=null;
+  let opt_list=[];
+	 for ( let i=0; i<item.options.length; i++ ) {
+ 	 let domid=i+'-'+num;
 		 opt_list[opt_list.length]=domid;
-   var domlist;
+   let domlist;
    if ( is_array(item.options[i].enable) ) domlist=item.options[i].enable;
 	  else { domlist=[]; domlist[0]=item.options[i].enable; }
-   for(var i=0;i<domlist.length;i++) domlist[i]=item.prefix+'-'+slugify(domlist[i]);
+   for(let i=0;i<domlist.length;i++) domlist[i]=item.prefix+'-'+slugify(domlist[i]);
 	  if ( $(Get(domid)).is(':checked') || isChecked(Get(domid)) ) {
 	  	value=i;
 	  	value_domid=domid;
- 	 	for(var j=0;j<domlist.length;j++){
+ 	 	for(let j=0;j<domlist.length;j++){
   		 Get('#'+domlist[j]).prop("disabled",true);
   		 Get('#'+domlist[j]).removeAttr("disabled");
 	 		}
 		 } else {
-		 	for ( var j=0; j<domlist.length; j++ ) Get('#'+domlist[j]).setAttribute("disabled",true);
+		 	for ( let j=0; j<domlist.length; j++ ) Get('#'+domlist[j]).setAttribute("disabled",true);
 		 }
 	 }
 	} else if ( item.type === 'select' ) {
-	 var value=ele.selectedIndex;
-	 var value_domid=value?(i+'-'+value):null;
-	 var opt_list=[];
- 	 for ( var i=0; i<item.options.length; i++ ) {
-		  var domid=i+'-'+num;
+	 let value=ele.selectedIndex;
+	 let value_domid=value?(i+'-'+value):null;
+	 let opt_list=[];
+ 	 for ( let i=0; i<item.options.length; i++ ) {
+		  let domid=i+'-'+num;
 		  opt_list[opt_list.length]=domid;
-	   var domlist;
+	   let domlist;
 	   if ( is_array(item.options[i].enable) ) domlist=item.options[i].enable;
 		  else { domlist=[]; domlist[0]=item.options[i].enable; }
-	   for (var i=0;i<domlist.length;i++) domlist[i]=item.prefix+'-'+slugify(domlist[i]);
+	   for (let i=0;i<domlist.length;i++) domlist[i]=item.prefix+'-'+slugify(domlist[i]);
 		  if ( value == i ) {
-		 	for(var j=0;j<domlist.length;j++){
+		 	for(let j=0;j<domlist.length;j++){
 	 		 Get('#'+domlist[j]).prop("disabled",true);
 	 		 Get('#'+domlist[j]).removeAttr("disabled");
  			}
 		 } else {
-    for ( var j=0; j<domlist.length; j++ ) Get('#'+domlist[j]).setAttribute("disabled",true);
+    for ( let j=0; j<domlist.length; j++ ) Get('#'+domlist[j]).setAttribute("disabled",true);
 		 }
 	 }
 	}
 }
 
 function revealByValue( ele ) {
-	var item=ele.formitem;
-	var n = (item.name?item.name:index);
-	var id = ele.id;
-	var p = (item.hint?item.hint:"");
+	let item=ele.formitem;
+	let n = (item.name?item.name:index);
+	let id = ele.id;
+	let p = (item.hint?item.hint:"");
 	if ( !( item.type == 'radio' || item.type == 'select' ) ) return;
 	if ( item.type == 'radio' ) {
-  var value=null;
-	 var value_domid=null;
-	 var opt_list=[];
-	 for ( var i=0; i<item.options.length; i++ ) {
-		 var domid=id+'-'+i;
+  let value=null;
+	 let value_domid=null;
+	 let opt_list=[];
+	 for ( let i=0; i<item.options.length; i++ ) {
+		 let domid=id+'-'+i;
 		 opt_list[opt_list.length]=domid;
- 	 var domlist;
+ 	 let domlist;
  	 if ( is_array(item.options[i].enable) ) domlist=item.options[i].enable;
 		 else { domlist=[]; domlist[0]=item.options[i].enable; }
- 	 for(var i=0;i<domlist.length;i++) domlist[i]=item.prefix+'-'+slugify(domlist[i]);
+ 	 for(let i=0;i<domlist.length;i++) domlist[i]=item.prefix+'-'+slugify(domlist[i]);
 		 if ( $(Get(domid)).is(':checked') || isChecked(Get(domid)) ) {
  			value=i;
  			value_domid=domid;
- 			for(var j=0;j<domlist.length;j++) $('#'+domlist[j]+'-wrapper').show();
+ 			for(let j=0;j<domlist.length;j++) $('#'+domlist[j]+'-wrapper').show();
 		 } else {
- 			for ( var j=0; j<domlist.length; j++ ) $('#'+domlist[j]+'-wrapper').hide();
+ 			for ( let j=0; j<domlist.length; j++ ) $('#'+domlist[j]+'-wrapper').hide();
 		 }
 	 }
 	} else if ( item.type == 'select' ) {
-	 var value=ele.selectedIndex;
-	 var value_domid=value?(i+'-'+value):null;
-	 var opt_list=[];
- 	for ( var i=0; i<item.options.length; i++ ) {
-		 var domid=id+'-'+i;
+	 let value=ele.selectedIndex;
+	 let value_domid=value?(i+'-'+value):null;
+	 let opt_list=[];
+ 	for ( let i=0; i<item.options.length; i++ ) {
+		 let domid=id+'-'+i;
 		 opt_list[opt_list.length]=domid;
-	  var domlist;
+	  let domlist;
 	  if ( is_array(item.options[i].enable) ) domlist=item.options[i].enable;
 		 else { domlist=[]; domlist[0]=item.options[i].enable; }
-	  for(var i=0;i<domlist.length;i++) domlist[i]=item.prefix+'-'+slugify(domlist[i]);
+	  for(let i=0;i<domlist.length;i++) domlist[i]=item.prefix+'-'+slugify(domlist[i]);
 		 if ( value == i ) {
- 			for(var j=0;j<domlist.length;j++) $('#'+domlist[j]+'-wrapper').show();
+ 			for(let j=0;j<domlist.length;j++) $('#'+domlist[j]+'-wrapper').show();
 		 } else {
- 			for (var j=0; j<domlist.length; j++) $('#'+domlist[j]+'-wrapper').hide();
+ 			for (let j=0; j<domlist.length; j++) $('#'+domlist[j]+'-wrapper').hide();
 		 }
 	 }
 	}
@@ -460,18 +460,18 @@ function revealByValue( ele ) {
 function jQueryForm( model, prefix="jsapp-model" ) {
  model.forEach(function(item,index){
    item.prefix=prefix;
-	  var n = (item.name?item.name:index);
-	  var i = prefix+'-'+slugify(n);
-	  var v = (item.value?item.value:"");
-	  var p = (item.hint?item.hint:"");
+	  let n = (item.name?item.name:index);
+	  let i = prefix+'-'+slugify(n);
+	  let v = (item.value?item.value:"");
+	  let p = (item.hint?item.hint:"");
    // extendable
    if ( item.type === 'extend' || item.type === 'extendable' ) {
     if ( defined(item.initial) && item.initial > 0 ) {
-     var outer=i;
-     for ( var x=0; x<item.initial; x++ ) { packFormExtendAdd(prefix,outer,true); }
+     let outer=i;
+     for ( let x=0; x<item.initial; x++ ) { packFormExtendAdd(prefix,outer,true); }
     }
    } else {
-    var ele=Get(i);
+    let ele=Get(i);
     if ( !ele ) { console.log("Warning: no valid element found by id "+i+" (index: "+index+")"); console.log(item); }
     ele.formitem=item;
     if ( item.tip ) {
@@ -545,57 +545,57 @@ function jQueryForm( model, prefix="jsapp-model" ) {
    // enable,reveal expects "domid" or ["domid","domid2"...]
    if ( item.type == 'toggle' ) {
     if ( item.enable ) {
-     var domlist;
+     let domlist;
      if ( is_array(item.enable) ) domlist=item.enable;
      else { domlist=[]; domlist[0]=item.enable; }
-     var ele=Get(i);
-     for(var k=0;k<domlist.length;k++) domlist[k]=prefix+'-'+slugify(domlist[k]);
+     let ele=Get(i);
+     for(let k=0;k<domlist.length;k++) domlist[k]=prefix+'-'+slugify(domlist[k]);
      ele.domlist=domlist;
      $(ele).toggle(
-      function(e){for(var i=0;i<this.domlist.length;i++){$('#'+this.domlist[i]).setAttribute("disabled",true);}},
-      function(e){for(var i=0;i<this.domlist.length;i++){$('#'+this.domlist[i]).prop("disabled",true);$(this.domlist[i]).removeAttr("disabled");}}
+      function(e){for(let i=0;i<this.domlist.length;i++){$('#'+this.domlist[i]).setAttribute("disabled",true);}},
+      function(e){for(let i=0;i<this.domlist.length;i++){$('#'+this.domlist[i]).prop("disabled",true);$(this.domlist[i]).removeAttr("disabled");}}
      );
      $(ele).click(function(e){
    	  console.log(this);
    	  if ( ($(this).is(":checked") || isChecked(this)) ) {
-   	 	for(var i=0;i<this.domlist.length;i++){$('#'+this.domlist[i]).setAttribute("disabled",true);} 
+   	 	for(let i=0;i<this.domlist.length;i++){$('#'+this.domlist[i]).setAttribute("disabled",true);} 
    	 	if (this.formitem.toggle && this.formitem.toggle.even) this.formitem.toggle.even(); 
    	  } else {
-   	 	for(var i=0;i<this.domlist.length;i++){$('#'+this.domlist[i]).prop("disabled",true);$(this.domlist[i]).removeAttr("disabled");}
+   	 	for(let i=0;i<this.domlist.length;i++){$('#'+this.domlist[i]).prop("disabled",true);$(this.domlist[i]).removeAttr("disabled");}
    	 	if (this.formitem.toggle && this.formitem.toggle.odd) this.formitem.toggle.odd(); 
    	  }			 
    	 });		 
      if ( istrue(item.value) ) {
-    	 for(var k=0;k<domlist.length;k++){Get(domlist[k]).setAttribute("disabled",true);}
+    	 for(let k=0;k<domlist.length;k++){Get(domlist[k]).setAttribute("disabled",true);}
      } else {
-   	  for(var k=0;k<domlist.length;k++){Get(domlist[k]).prop("disabled",true);Get('#'+domlist[k]).removeAttr("disabled");}
+   	  for(let k=0;k<domlist.length;k++){Get(domlist[k]).prop("disabled",true);Get('#'+domlist[k]).removeAttr("disabled");}
      }
     }
     if ( item.reveal ) {
-     var domlist;
+     let domlist;
      if ( is_array(item.reveal) ) domlist=item.reveal;
      else { domlist=[]; domlist[0]=item.reveal; }
      console.log(domlist);
-     var ele=Get(i);
-     for(var k=0;k<domlist.length;k++) domlist[k]=prefix+'-'+slugify(domlist[k]);
+     let ele=Get(i);
+     for(let k=0;k<domlist.length;k++) domlist[k]=prefix+'-'+slugify(domlist[k]);
      ele.domlist=domlist;
      $(ele).toggle(
-     	function(e){console.log("even");for(var m=0;m<this.domlist.length;m++){$(this.domlist[m]).show();} if (this.formitem.toggle && this.formitem.toggle.even) this.formitem.toggle.even(); },
-      function(e){console.log("odd"); for(var m=0;m<this.domlist.length;m++){$(this.domlist[m]).hide();} if (this.formitem.toggle && this.formitem.toggle.odd) this.formitem.toggle.odd(); }
+     	function(e){console.log("even");for(let m=0;m<this.domlist.length;m++){$(this.domlist[m]).show();} if (this.formitem.toggle && this.formitem.toggle.even) this.formitem.toggle.even(); },
+      function(e){console.log("odd"); for(let m=0;m<this.domlist.length;m++){$(this.domlist[m]).hide();} if (this.formitem.toggle && this.formitem.toggle.odd) this.formitem.toggle.odd(); }
      );
      $(ele).click(function(e){
    	  if ( ($(this).is(":checked") || isChecked(this)) ) {
-   	 	for(var k=0;k<this.domlist.length;k++){$(Get(this.domlist[k]+'-wrapper')).show();} 
+   	 	for(let k=0;k<this.domlist.length;k++){$(Get(this.domlist[k]+'-wrapper')).show();} 
    	 	if (this.formitem.toggle && this.formitem.toggle.even) this.formitem.toggle.even(); 
    	  } else {
-   	 	for(var k=0;k<this.domlist.length;k++){$(Get(this.domlist[k]+'-wrapper')).hide();}
+   	 	for(let k=0;k<this.domlist.length;k++){$(Get(this.domlist[k]+'-wrapper')).hide();}
    	 	if (this.formitem.toggle && this.formitem.toggle.odd) this.formitem.toggle.odd(); 
    	  }			 
      });
      if ( istrue(item.value) ) {
-   	  for(var k=0;k<domlist.length;k++){$(Get(domlist[k]+'-wrapper')).show();}
+   	  for(let k=0;k<domlist.length;k++){$(Get(domlist[k]+'-wrapper')).show();}
      } else {
-   	  for(var k=0;k<domlist.length;k++){$(Get(domlist[k]+'-wrapper')).hide();}
+   	  for(let k=0;k<domlist.length;k++){$(Get(domlist[k]+'-wrapper')).hide();}
      }
     }
    }
@@ -603,18 +603,18 @@ function jQueryForm( model, prefix="jsapp-model" ) {
    // enable,reveal expects [] of { value:"triggervalue", elements: "domid" or ["domid","domid"] }
    if ( item.type == 'radio' ) {
     if ( item.enable ) {
-     for ( var k=0; k<item.options.length; k++ ) {
-      var opt_i = k+'-'+num;
-      var opt_ele=Get(opt_i);
+     for ( let k=0; k<item.options.length; k++ ) {
+      let opt_i = k+'-'+num;
+      let opt_ele=Get(opt_i);
       opt_ele.formitem=item;
       $(opt_ele).change( function(e){ enableByValue(this); } );
       if ( $(opt_ele).is(':checked') ) enableByValue(opt_ele);
    	 }
     }
     if ( item.reveal ) {
-     for ( var i=0; k<item.options.length; k++ ) {
-      var opt_i = k+'-'+num;
-      var opt_ele=Get(opt_i);
+     for ( let i=0; k<item.options.length; k++ ) {
+      let opt_i = k+'-'+num;
+      let opt_ele=Get(opt_i);
       opt_ele.formitem=item;
       $(opt_ele).change( function(e){ revealByValue(this); } );
       if ( $(opt_ele).is(':checked') ) revealByValue(opt_ele);
@@ -624,8 +624,8 @@ function jQueryForm( model, prefix="jsapp-model" ) {
    // enable or reveal appear inside the options list
    // enable,reveal expects [] of { value:"triggervalue", elements: "domid" or ["domid","domid"] }
    if ( item.type == 'select' ) {
-    if ( item.enable ) for ( var k=0; k<item.options.length; k++ ) $(ele).change( function(e){ enableByValue(this); } );
-    if ( item.reveal ) for ( var k=0; k<item.options.length; k++ ) $(ele).change( function(e){ revealByValue(this); } );
+    if ( item.enable ) for ( let k=0; k<item.options.length; k++ ) $(ele).change( function(e){ enableByValue(this); } );
+    if ( item.reveal ) for ( let k=0; k<item.options.length; k++ ) $(ele).change( function(e){ revealByValue(this); } );
     $(ele).trigger('change');
    }
   }
@@ -639,13 +639,13 @@ function FormErr(item,model,prefix) {
 
 // Get the data out of a packed form
 function UnpackForm( model, prefix="jsapp-model" ) {
- var data={};
+ let data={};
  console.log("Unpacking: ");
  console.log(model);
  model.forEach(function(item,index){
-	 var n = (item.name?item.name:index);
-	 var i = prefix+'-'+slugify(n);
-	 var v = ( item.type == "toggle" ) ? ($('#'+i).is(':checked')?1:0) :
+	 let n = (item.name?item.name:index);
+	 let i = prefix+'-'+slugify(n);
+	 let v = ( item.type == "toggle" ) ? ($('#'+i).is(':checked')?1:0) :
              ( item.type == "markdown" ) ? (item.live.value()) :
 			 $("#"+i).val();
 //  console.log(n+"("+i+")="+v);
@@ -658,11 +658,11 @@ function UnpackForm( model, prefix="jsapp-model" ) {
           && (item.range && beyond_range(v,item.range.min,item.range.max)) ) return FormErr(item,model,prefix);
 	 }
   if ( item.type == "extend" || item.type == "extendable" ) {
-   var unpacked=[];
-   var outer=i;
-   var wrapper=Get(outer);
-   var inners=$(wrapper).children().each(function(index){
-    var pre=$(this).attr("id");
+   let unpacked=[];
+   let outer=i;
+   let wrapper=Get(outer);
+   let inners=$(wrapper).children().each(function(index){
+    let pre=$(this).attr("id");
     if ( !pre.endsWith("addbtn") ) unpacked[unpacked.length]=UnpackForm(item.model,pre);
    });
    data[n]=unpacked;
@@ -684,14 +684,14 @@ function UnpackForm( model, prefix="jsapp-model" ) {
 
 // One or more non-breaking spaces
 function nbsp( count=1 ) {
- var s="";
- for ( var i=0; i<count; i++ ) s+="&nbsp;";
+ let s="";
+ for ( let i=0; i<count; i++ ) s+="&nbsp;";
  return s;
 }
 
 // Fontawesome Icon
 function faicon( css=null, tip=null, inner="", id=null, style=null, click=null ) {
- var s='<i';
+ let s='<i';
  if ( tip ) s+= ' alt="'
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="fa '+css+'"';
@@ -703,7 +703,7 @@ function faicon( css=null, tip=null, inner="", id=null, style=null, click=null )
 
 // <I> as an icon tag
 function icon( css=null, tip=null, inner="", id=null, style=null, click=null ) {
- var s='<i';
+ let s='<i';
  if ( tip ) s+= ' alt="'
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
@@ -715,19 +715,19 @@ function icon( css=null, tip=null, inner="", id=null, style=null, click=null ) {
 
 // Href as a button
 function hrefbtn( inner="", click=null, css=null, id=null, style=null, other=null ) {
- var s='<a href="#" ';
+ let s='<a href="#" ';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</a>';
 }
 
 // Form input elements (and datalist)
 function input( id=null, type="text", placeholder=null, css=null, style=null, value=null, min=null, max=null, datalist=null, disabled=null, other=null ) {
- var s='<input type="'+type+'"';
+ let s='<input type="'+type+'"';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
@@ -736,147 +736,147 @@ function input( id=null, type="text", placeholder=null, css=null, style=null, va
  if ( value ) s+=' value="'+value+'"';
  if ( min ) s+=' min="'+min+'"'; else if ( max ) s+=' min="none"';
  if ( max ) s+=' max="'+max+'"'; else if ( min ) s+=' max="none"';
- var after="";
+ let after="";
  if ( datalist && is_array(datalist) && datalist.length > 0 ) {
   s+=' list="'+id+'-datalist"';
   after+='<datalist id="'+id+'-datalist">';
-  for ( var i=0; i<datalist.length; i++ ) {
+  for ( let i=0; i<datalist.length; i++ ) {
    after+='<option value="'+datalist[i]+'">';
   }
   after+='</datalist>';
  }
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  return s+' />'+after; 
 }
 
 // A button
 function button( inner="", click=null, css=null, id=null, style=null, other=null ) {
- var s='<button';
+ let s='<button';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</button>';
 }
 
 // p
 function p( inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<p';
+ let s='<p';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</p>';
 }
 
 // Heading 6
 function h6( inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<h6';
+ let s='<h6';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
  s+='>';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  return s+inner+'</h6>';
 }
 
 // Heading 5
 function h5( inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<h5';
+ let s='<h5';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</h5>';
 }
 
 // Heading 4
 function h4( inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<h4';
+ let s='<h4';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</h4>';
 }
 
 // Heading 3
 function h3( inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<h3';
+ let s='<h3';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</h3>';
 }
 
 // Heading 2
 function h2( inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<h2';
+ let s='<h2';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</h2>';
 }
 
 // Heading 1
 function h1( inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<h1';
+ let s='<h1';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</h1>';
 }
 
 // small tag
 function small( inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<small';
+ let s='<small';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</small>';
 }
 
 // span tag
 function span( inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<span';
+ let s='<span';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</span>';
 }
 
 // div tag
 function div( inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<div';
+ let s='<div';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</div>';
 }
@@ -885,148 +885,148 @@ function div( inner="", css=null, id=null, style=null, click=null, other=null ) 
 // table, tr, th, td, td_ (multi-span)
 
 function thead( inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<thead';
+ let s='<thead';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</thead>'; 
 }
 
 function tbody( inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<tbody';
+ let s='<tbody';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</tbody>'; 
 }
 
 function tfoot( inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<tfoot';
+ let s='<tfoot';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</tfoot>'; 
 }
 
 function table( body="", head="", foot="", css=null, id=null, style=null, other=null ) {
- var s='<table';
+ let s='<table';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+=' cellpadding=0 cellspacing=0>';
  return s+(head && head.length>0?thead(head):"")+(body && body.length >0?tbody(body):"")+(foot && foot.length>0?tfoot(foot):"")+'</table>'; 
 }
 
 function th( inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<th';
+ let s='<th';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</th>'; 
 }
 
 function tr( inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<tr';
+ let s='<tr';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</tr>'; 
 }
 
 function td( inner="", width=null, css=null, id=null, style=null, click=null, other=null ) {
- var s='<td';
+ let s='<td';
  if ( width ) s+=' width="'+width+'"';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</td>'; 
 }
 
 function td_( columns, inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<td colspan='+columns;
+ let s='<td colspan='+columns;
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</td>'; 
 }
 
 // canvas tag
 function canvas( id=null, style=null, css=null, other=null ) {
- var s='<canvas';
+ let s='<canvas';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+'</canvas>';
 }
 
 // ol tag
 function ol( inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<ol';
+ let s='<ol';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</ol>';
 }
 
 // ul tag
 function ul( inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<ul';
+ let s='<ul';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</ul>';
 }
 
 // li tag
 function li( inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<li';
+ let s='<li';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</li>';
 }
 
 // center tag
 function center( inner="", css=null, id=null, style=null, click=null, other=null ) {
- var s='<center';
+ let s='<center';
  if ( id ) s+=' id="'+id+'"';
  if ( css ) s+=' class="'+css+'"';
  if ( style ) s+=' style="'+style+'"';
  if ( click ) s+=' onclick="javascript:'+click+'"';
- if ( other ) { if ( is_array(other) ) { for ( var i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
+ if ( other ) { if ( is_array(other) ) { for ( let i=0; i<other.length; i++ ) s+=' '+other[i].name+'="'+other[i].value+'"'; } else s+=other; }
  s+='>';
  return s+inner+'</center>';
 }

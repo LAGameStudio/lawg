@@ -33,7 +33,7 @@ class LADisplay {
   Setup() {
     this.Resized();
     window.onresize = la.display.Resized;
-    var screen=document.createElement("div");
+    let screen=document.createElement("div");
     screen.id="outer-container";
     screen.style.width="100%";
     screen.style.height="100%";

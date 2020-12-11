@@ -2,9 +2,9 @@
 
 // Effectively an overwriting merge of two objects
 function importObject(to, from,name=null) {
- var oname=name;
+ let oname=name;
  if ( !defined(name) || !name ) oname=from.constructor.name;
- for (var prop in from) {
+ for (let prop in from) {
   if ( defined(to[prop]) ) console.log("importObject("+oname+"): Warning `"+prop+"` is already defined, redefining" );
   to[prop] = from[prop];
  }
@@ -26,7 +26,7 @@ function forEachNested(O, f, cur){
 
 // Traverse one level down in a tree, passing it to a function.
 function traverse(o,func) {
- for (var i in o) {
+ for (let i in o) {
   func.apply(this,[i,o[i]]);  
   if (o[i] !== null && typeof(o[i])=="object") traverse(o[i],func); // going one step down in the object tree!!
  }
@@ -34,18 +34,18 @@ function traverse(o,func) {
 
 //// Useful web page and browser stuff
 
-// Your GET POST variables
+// Your GET POST letiables
 function getUrlParam(name) {
- var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
+ let results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
  return (results && results[1]) || undefined;
 }
 
-// Read a page's GET URL variables and return them as an associative array.
+// Read a page's GET URL letiables and return them as an associative array.
 function getparams() {
- var vars = [], hash;
- var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
- for(var i = 0; i < hashes.length; i++) { hash = hashes[i].split('='); vars[hash[0]] = hash[1]; }
- return vars;
+ let lets = [], hash;
+ let hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+ for(let i = 0; i < hashes.length; i++) { hash = hashes[i].split('='); lets[hash[0]] = hash[1]; }
+ return lets;
 }
 
 // Check your protocol (returns http: or https:)
@@ -72,7 +72,7 @@ function preventDefaults(e) {
 
 // Get the value from an ID.
 function GetInputValue(id) {
-	var a = Get(id);
+	let a = Get(id);
 	return a ? $(a).val() : null;
 }
 
@@ -87,11 +87,11 @@ function isChecked(item) {
 
 // returns the browser's page visibility property
 function PageVisibilityProp(){
-  var prefixes = ['webkit','moz','ms','o'];    
+  let prefixes = ['webkit','moz','ms','o'];    
   // if 'hidden' is natively supported just return it
   if ('hidden' in document) return 'hidden';    
   // otherwise loop over all the known prefixes until we find one
-  for (var i = 0; i < prefixes.length; i++){
+  for (let i = 0; i < prefixes.length; i++){
       if ((prefixes[i] + 'Hidden') in document) 
           return prefixes[i] + 'Hidden';
   }
@@ -100,19 +100,19 @@ function PageVisibilityProp(){
 }
 
 function isPageVisible() {
-  var prop = PageVisibilityProp();
+  let prop = PageVisibilityProp();
   if (!prop) return true;    
   return !document[prop];
 }
 
 // Responsive tests for area width
 function ProbeAreaWidth(domid) {
-  var probe=document.createElement("div");
-	var outer=Get(domid);
+  let probe=document.createElement("div");
+	let outer=Get(domid);
   outer.appendChild(probe);
 	probe.setAttribute("id","ProbeAreaWidth-probe");
 	probe.setAttribute("style","width:100%;");
-	var totalW=probe.clientWidth;
+	let totalW=probe.clientWidth;
   outer.removeChild(probe);
   return totalW;
 }
@@ -124,7 +124,7 @@ function randomele( arr ) {
 
 // Generate a download from a function
 function downloadLink(url,filename) {
-  var element = document.createElement('a');
+  let element = document.createElement('a');
   element.setAttribute('href', url);
   element.setAttribute('download', filename);
   element.style.display = 'none';
@@ -135,11 +135,11 @@ function downloadLink(url,filename) {
 
 // Function to download data to a file
 function downloadAsFile(data, filename, type="text") {
-    var file = new Blob([data], {type: type});
+    let file = new Blob([data], {type: type});
     if (window.navigator.msSaveOrOpenBlob) // IE10+
         window.navigator.msSaveOrOpenBlob(file, filename);
     else { // Others
-        var a = document.createElement("a"),
+        let a = document.createElement("a"),
                 url = URL.createObjectURL(file);
         a.href = url;
         a.download = filename;
@@ -156,17 +156,17 @@ function downloadAsFile(data, filename, type="text") {
 // Password strength from zxcvbn.js
 var pwstrength=0;
 function passCheckFun( event, id="password-strength-text" ) {
- var ele=event.target;
- var outputele = Get(id);
-  var password_strength_messages = {
+ let ele=event.target;
+ let outputele = Get(id);
+  let password_strength_messages = {
    0: "Worst <span class='fa fa-warning mi-red'></span>",
    1: "Bad <span class='fa fa-thumbs-down mi-red'></span>",
    2: "Weak <span class='fa fa-frown-o mi-red'></span>",
    3: "Good <span class='fa fa-check mi-green'></span>",
    4: "<span class='mi-green'>Strong</span> <span class='fa fa-user-secret'></span>"
   };
-  var v = ele.value;
-  var result = zxcvbn(v);
+  let v = ele.value;
+  let result = zxcvbn(v);
   if(v !== "") {
         if ( outputele ) outputele.innerHTML = "Password Strength: " + "<strong>"
          + password_strength_messages[result.score] + "</strong>"
@@ -182,13 +182,13 @@ function passCheckFun( event, id="password-strength-text" ) {
 
 // php brainfarts
 function isset(obj,elem) { return defined(obj) && obj.hasOwnProperty(elem); }
-function var_dump(a,b=null) { if ( b ) { console.log(a); console.log(b); } else console.log(a); }
-function defined(objele) { var result=false; try { result= (typeof objele !== 'undefined'); } catch(e) { result=false; } return result; }
+function let_dump(a,b=null) { if ( b ) { console.log(a); console.log(b); } else console.log(a); }
+function defined(objele) { let result=false; try { result= (typeof objele !== 'undefined'); } catch(e) { result=false; } return result; }
 function classname(o) { return typeof o == "object" ? o.constructor.name : false; }
 function isnull(obj) { return (obj !== null); }
 function int(a) { return parseInt(a); }
 function explode( sep, str ) { return str.split(sep); }
-function implode( sep, arr ) { var res=""; for ( var i=0; i<arr.length; i++ ) { res+=arr[i]; if ( i != arr.length -1 ) res+=sep; } return res; }
+function implode( sep, arr ) { let res=""; for ( let i=0; i<arr.length; i++ ) { res+=arr[i]; if ( i != arr.length -1 ) res+=sep; } return res; }
 function is_array(arr) { return Array.isArray(arr); }
 function is_object(o) { return ( typeof o == 'object') ? true : false; }
 function isBoolean(obj) { return obj === true || obj === false || toString.call(obj) === '[object Boolean]'; }
@@ -213,9 +213,9 @@ function rtrim (str, charlist) {
 
 // human file size
 function humanFileSize(bytes, si=true) {
-  var thresh = (si ? 1000 : 1024), u=-1;
+  let thresh = (si ? 1000 : 1024), u=-1;
   if (Math.abs(bytes) < thresh) return bytes + ' b';
-  var units = si ? ['kb','mb','G','TB','PB','EB','ZB','YB'] : ['KiB','MiB','GiB','TiB','PiB','EiB','ZiB','YiB'];
+  let units = si ? ['kb','mb','G','TB','PB','EB','ZB','YB'] : ['KiB','MiB','GiB','TiB','PiB','EiB','ZiB','YiB'];
   do { bytes /= thresh; ++u; } while(Math.abs(bytes) >= thresh && u < units.length - 1);
   return bytes.toFixed(1)+' '+units[u];
 }
@@ -224,7 +224,7 @@ function humanFileSize(bytes, si=true) {
 
 // When the user scrolls down 20px from the top of the document, show the button
 function scrollFunction() {
-  var mybutton=Get("scroll_to_top");
+  let mybutton=Get("scroll_to_top");
   if ( !mybutton ) return;
   if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
     mybutton.style.display = "block";
@@ -248,7 +248,7 @@ function scrollElement( ele, delayed=2000 ) {
 
 // Wraps Bootstrap tooltips
 function Tooltip( domid, content, direction="top" ) {
- var dom=Get(domid);
+ let dom=Get(domid);
  if ( !defined(dom) || !dom ) return false;
  $(dom).attr("data-toggle","tooltip");
  $(dom).attr("data-placement",direction);
@@ -269,17 +269,17 @@ function html_Switch( domid, checked=false, disabled=false) {
 
 /// A deferred queue that gaurantees unique calls
 /*
-var deferredQueueEventCodes=[];
-var deferredQueueFunctions=[];
+let deferredQueueEventCodes=[];
+let deferredQueueFunctions=[];
 function CallDeferredUnique(code,fun) {
- for ( var i=0; i<deferredQueueFunctions.length; i++ ) {
+ for ( let i=0; i<deferredQueueFunctions.length; i++ ) {
   if ( deferredQueueEventCodes[i] == code ) return;
  }
  deferredQueueFunctions[deferredQueueFunctions.length]=fun;
  deferredQueueEventCodes[deferredQueueEventCodes.length]=code;
 }
 function updateDeferredQueue() {
- for ( var i=0; i<deferredQueueFunctions.length; i++ ) {
+ for ( let i=0; i<deferredQueueFunctions.length; i++ ) {
   deferredQueueFunctions[i]();
  }
  deferredQueueEventCodes=[];
@@ -290,7 +290,7 @@ setInterval(updateDeferredQueue,15);
 
 //// Time and date
 
-function getLocalTime() { var d=new Date(); return d.getMilliseconds(); }
+function getLocalTime() { let d=new Date(); return d.getMilliseconds(); }
 
 function Timestamped(data) { return { data: data, time: getLocalTime() }; }
 
@@ -298,7 +298,7 @@ var todays_html_date=formatDateForHTML(idleSince);
 var week_ago_html_date=formatDateForHTML(Date.now() - 7*(24*60*60*1000));
 
 function nowTimeDate() {
- var currentdate = new Date(Date.now());
+ let currentdate = new Date(Date.now());
  return currentdate.toLocaleString().replaceAll(",","");
  /*
  return (currentdate.getMonth()+1)  + "/"
@@ -312,7 +312,7 @@ function nowTimeDate() {
 //// Unix Timestamps
 
 // timestamp conversion
-function ts(a) { var d= new Date(parseInt(a)*1000);
+function ts(a) { let d= new Date(parseInt(a)*1000);
  return d.toString()
          .replace("Eastern Standard Time","EST")
          .replace("Eastern Daylight Time","EDT")
@@ -327,18 +327,18 @@ function ts(a) { var d= new Date(parseInt(a)*1000);
 
 // timestamp conversion
 function tsDDMMYYYY(a,sep='-') {
- var d= new Date(parseInt(a)*1000);
+ let d= new Date(parseInt(a)*1000);
  d=d.toISOString().substring(0,10);
- var parts=d.split('-');
+ let parts=d.split('-');
  return parts[2]+sep+parts[1]+sep+parts[0];
 }
 
 // timestamp conversion
 function tsYYYYMMDD(a,sep='-') {
- var d= new Date(parseInt(a)*1000);
+ let d= new Date(parseInt(a)*1000);
  console.log(d.toISOString());
  d=d.toISOString().substring(0,10);
- var parts=d.split('-');
+ let parts=d.split('-');
  return parts[0]+sep+parts[1]+sep+parts[2];
 }
 
@@ -348,7 +348,7 @@ var Date_options = {};
 var idleSince = Date.now();
 
 function formatDateForHTML(date) {
- var d = new Date(date),
+ let d = new Date(date),
      month = '' + (d.getMonth() + 1),
      day = '' + d.getDate(),
      year = d.getFullYear();
@@ -358,61 +358,61 @@ function formatDateForHTML(date) {
 }
 
 function HUMANDATE( dstring ) { // Locale version for human eyes
- var d= new Date(dstring);
- var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+ let d= new Date(dstring);
+ let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
  return d.toLocaleDateString(undefined,options);
 }
 
 function HUMANTIME( dstring ) { // Locale version for human eyes
- var d= new Date(dstring);
- var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+ let d= new Date(dstring);
+ let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
  return d.toLocaleTimeString(undefined,options);
 }
 
 function DDMMYYYY( dstring ){ // this format required for API calls
  if ( !defined(dstring) ) return null;
- var d= new Date(dstring);
+ let d= new Date(dstring);
  d=d.toISOString().substring(0,10);
- var parts=d.split('-');
+ let parts=d.split('-');
  return parts[2]+'/'+parts[1]+'/'+parts[0];
 }
 
 function YYYYMMDD( dstring ){ // this format required for html date input tag value
  if ( !defined(dstring) ) return null;
- var d= new Date(dstring);
+ let d= new Date(dstring);
  d=d.toISOString().substring(0,10);
- var parts=d.split('-');
+ let parts=d.split('-');
  return parts[0]+'-'+parts[1]+'-'+parts[2];
 }
 
 // flips YYYYMMDD to DDMMYYYY
 function DDMMYYYYtoHUMAN( dstring, sep='/' ){
- var parts=dstring.split(sep);
- var d=new Date();
+ let parts=dstring.split(sep);
+ let d=new Date();
  d.setDate(parseInt(parts[0]));
  d.setMonth(parseInt(parts[1])-1);
  d.setYear(parseInt(parts[2]));
- var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+ let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
  return d.toLocaleDateString(undefined,options);
 }
 
 function YYYYMMDDtoDDMMYYYY(ds, sep="-") {
- var parts=ds.split(sep);
+ let parts=ds.split(sep);
  return parts[1]+sep+parts[2]+sep+parts[0];
 }
 
 function DDMMYYYYtoYYYYMMDD(ds, sep="-") {
- var parts=ds.split(sep);
+ let parts=ds.split(sep);
  return parts[1]+sep+parts[2]+sep+parts[0];
 }
 
 function DDMMtoMMDD(ds, sep="-") {
- var parts=ds.split(sep);
+ let parts=ds.split(sep);
  return parts[1]+sep+parts[0]+sep+parts[2];
 }
 
 function MMDDtoDDMM(ds, sep="-") {
- var parts=ds.split(sep);
+ let parts=ds.split(sep);
  return parts[1]+sep+parts[0]+sep+parts[2];
 }
 
@@ -535,8 +535,8 @@ class LinkedList {
  }
 
  IndexByID( id ) {
-  var value = defined(id.isListItem) && id.isListItem ? id.id : id;
-  for ( var i=0; i<this.list.length; i++ ) if ( this.list[i].id == value ) return i;
+  let value = defined(id.isListItem) && id.isListItem ? id.id : id;
+  for ( let i=0; i<this.list.length; i++ ) if ( this.list[i].id == value ) return i;
   return -1;
  }
  
@@ -547,14 +547,14 @@ class LinkedList {
  LastIndex() { return this.list.length-1; }
  First() { return this.list[0]; }  
  Last() {
-  var index=this.LastIndex();
+  let index=this.LastIndex();
   if ( defined(this.list[index])) return this.list[index];
   return null;
  }
  
  Append( item ) {
-  var wasMemberOf=item.wasMemberOf;
-  var last=this.Last();
+  let wasMemberOf=item.wasMemberOf;
+  let last=this.Last();
   if ( last ) {
    last.next=item;
    item.prev=last;
@@ -574,9 +574,9 @@ class LinkedList {
  
  Remove( id ) {
   if ( defined(id.isListItem) && id.isListItem ) id=id.id;
-  var index=this.IndexByID(id);
+  let index=this.IndexByID(id);
   if ( index < 0 ) return false;
-  var item=this.list[index];
+  let item=this.list[index];
   if (item.memberOf != this ) return false;
   this.list.splice(index, 1);
   item.wasMemberOf=this;
@@ -588,7 +588,7 @@ class LinkedList {
  }
  
  Pop() {
-  var item=this.Last();
+  let item=this.Last();
   return this.Remove(item);
  }
  
@@ -604,14 +604,14 @@ class LinkedList {
  
  Forward( id ) {
   if ( defined(id.isListItem) && id.isListItem ) id=id.id;
-  var index=this.IndexByID(id);
+  let index=this.IndexByID(id);
   if ( index < 0 || index == this.LastIndex() ) return false;
   return this.IndexTo(id,index);
  }
  
  Backward( id ) {
    if ( defined(id.isListItem) && id.isListItem ) id=id.id;
-   var index=this.IndexByID(id);
+   let index=this.IndexByID(id);
    if ( index < 1 ) return false;
    return this.IndexTo(id,index-1);
  }
@@ -622,7 +622,7 @@ class LinkedList {
  IndexTo( id, to ) {
    if (to < 0 || to > this.LastIndex() ) return false;
    if ( defined(id.isListItem) && id.isListItem ) id=id.id;
-   var index=this.IndexByID(id);
+   let index=this.IndexByID(id);
    if ( index < 0 ) return false;
    if ( index == to ) return true;
    this.list.splice(to, 0, this.list.splice(index, 1)[0]);
@@ -631,7 +631,7 @@ class LinkedList {
  }
  
  Reindex() {
-  for ( var j=0; j<this.list.length; j++ ) {
+  for ( let j=0; j<this.list.length; j++ ) {
    this.list[j].prev=(j == 0 ? null : this.list[j-1]);
    this.list[j].next=(j == this.LastIndex() ? null : this.list[j+1]);
    this.list[j].OnReindex(j);

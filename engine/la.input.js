@@ -7,14 +7,14 @@ class KeyboardInput {
   this.locations=["Standard", "Left", "Right", "Numpad", "Mobile", "Joystick"];
   this.Reset();
  }
- anyDown(key) { for ( var i=0; i<key.state.length; i++ ) if ( key.state[i] ) return true; return false; }
+ anyDown(key) { for ( let i=0; i<key.state.length; i++ ) if ( key.state[i] ) return true; return false; }
  getDown(key) {
-  var result="";
-  for ( var i=0; i<key.state.length; i++ ) if ( key.state[i] ) result+=la.input.keyboard.locations[i]+",";
+  let result="";
+  for ( let i=0; i<key.state.length; i++ ) if ( key.state[i] ) result+=la.input.keyboard.locations[i]+",";
   return rtrim(result,",");
  }
  keyboard(keyCode) {
-   var key = {
+   let key = {
     name: this.GetKeyName(keyCode),
     code: keyCode,
     state: [ false, false, false, false, false, false, false, false ],
@@ -535,8 +535,8 @@ class LAInput {
   }
   
   SetCursor( name ) {
-   var found=false;
-   for ( var i=0; i<this.valid_cursors.length; i++ ) if ( name == this.valid_cursors[i] ) { found=true; break; }
+   let found=false;
+   for ( let i=0; i<this.valid_cursors.length; i++ ) if ( name == this.valid_cursors[i] ) { found=true; break; }
    if ( !found ) {
     console.log("la.input.SetCursor(`"+name+"`) is invalid, valid cursors are: ");
     console.log(this.valid_cursors);

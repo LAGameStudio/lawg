@@ -1,7 +1,7 @@
 'use strict';
 
 String.prototype.replaceAll = function(search, replacement) {
-    var target = this;
+    let target = this;
     return target.split(search).join(replacement);
 };
 
@@ -18,7 +18,7 @@ function is_string(x) { return isString(x); }
 function assure_string_array(x) { if ( !is_array(x) ) return [ x ]; else return x; }
 
 function stripHtml(html) {
-   var tmp = document.createElement("DIV");
+   let tmp = document.createElement("DIV");
    tmp.innerHTML = html;
    return tmp.textContent || tmp.innerText || "";
 }
@@ -36,7 +36,7 @@ function slugify(s) {
 
 // Data normalization: is true?
 function istrue(v) {
-	var b=isString(b)?v.toLowerCase():v;
+	let b=isString(b)?v.toLowerCase():v;
 	if ( b === true ) return true;
 	if ( b == '1' ) return true;
 	if ( b === 1 ) return true;
@@ -48,7 +48,7 @@ function istrue(v) {
 
 // Data normalization: is false?
 function isfalse(v) {
-	var b=isString(b)?v.toLowerCase():v;
+	let b=isString(b)?v.toLowerCase():v;
 	if ( b === false ) return true;
 	if ( b == '0' ) return true;
 	if ( b === 0 ) return true;
