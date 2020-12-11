@@ -82,6 +82,7 @@ class Player extends Entity {
     this.lives=3;
     this.cooldown=0;
     this.score=0;
+    /*
     this.shooting=la.audio.Load({
      src: "tests/s/fire.wav",
      html5: true,
@@ -94,6 +95,7 @@ class Player extends Entity {
      volume: 0.0,
      loop: true
     });
+    */
     console.log(this.thrusting);
     this.Render=function(list) {
      la.art.Bind(list.renderer.ctx);
@@ -113,7 +115,7 @@ class Player extends Entity {
       if ( this.cooldown > 0 ) this.cooldown--;
       if ( this.cooldown <= 0 && la.input.keyboard.ctrl.isDown ) {
        var bullet=new Bullet();
-       this.shooting.play();
+       //this.shooting.play();
        bullet.position.Set(this.position);
        var fired=new Cartesian(0,-(10+this.velocity));
        fired=fired.Rotate(this.angle);
@@ -127,11 +129,11 @@ class Player extends Entity {
       if ( la.input.keyboard.up.isDown || la.input.keyboard.W.isDown ) { if ( this.velocity < 10 ) this.velocity+=0.1; }
       else if ( this.velocity > 0 ) this.velocity-=1;
       else this.velocity=0;
-      if ( this.velocity > 0 && !this.thrusting.playing() ) {
+      if ( this.velocity > 0 /*&& !this.thrusting.playing()*/ ) {
         console.log("Playing thrust sound...");
-        this.thrusting.play();
+        //this.thrusting.play();
       }
-      this.thrusting.volume(this.velocity/10 * 0.5);
+      //this.thrusting.volume(this.velocity/10 * 0.5);
       var momentum=new Cartesian(0,-this.velocity);
       momentum=momentum.Rotate(this.angle);
       this.position=this.position.Add(momentum);
@@ -160,7 +162,7 @@ entities.CheckCollisions=function(against) {
      if ( defined(this.list[i].isAsteroid) ) {
       if ( Math.getDistance( against.position.x, against.position.y, this.list[i].position.x, this.list[i].position.y )
           < this.list[i].radius * 0.9 ) { // Player crashes into asteroid
-        console.log("Player hit asteroid!  Game over!");
+        //console.log("Player hit asteroid!  Game over!");
       }
      }    
    }
