@@ -151,7 +151,7 @@ entities.CheckCollisions=function(against) {
      if ( defined(this.list[i].isAsteroid) ) {
       if ( Math.getDistance( against.position.x, against.position.y, this.list[i].position.x, this.list[i].position.y )
           < this.list[i].radius * 0.9 ) { // Player crashes into asteroid
-        alert("Player hit asteroid!  Game over!");
+        console.log("Player hit asteroid!  Game over!");
       }
      }    
    }

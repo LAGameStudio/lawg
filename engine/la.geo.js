@@ -9,8 +9,12 @@
 //  - element/entity geometry tracking
 //  - general purpose UI stuff (mouse/touch/buttons/menus)
 //  - simple collision testing
-function Cartesian( x=null, y=null, w=null, h=null ) {
-  this.Init = function() {
+class Cartesian {
+  constructor( x=null, y=null, w=null, h=null ) {
+   this.Init();
+   if ( x !== null && y !== null ) this.Set(x,y,w,h);
+  }
+  Init() {
     this.x=0.0;
     this.y=0.0;
     this.z=0.0;
@@ -29,8 +33,8 @@ function Cartesian( x=null, y=null, w=null, h=null ) {
     this._data=null; // Used for comparators.
     this.length=0;
     this.type="point";
-  };
-  this.Update = function() {
+  }
+  Update() {
    if ( this.x !== null && this.y !== null && this.w !== null && this.h !== null ) {
     this.type="linerect";
     this.w2=this.w/2.0;
@@ -59,8 +63,8 @@ function Cartesian( x=null, y=null, w=null, h=null ) {
     this.length=0;
     this.a=null;
    }
-  };
-  this.Set = function ( x, y, w=null, h=null ) {
+  }
+  Set( x, y, w=null, h=null ) {
    if ( !y && classname(x) == "Cartesian" ) {
     this.Set(x.x,x.y,x.w,x.h);
     this.Update();
@@ -71,46 +75,47 @@ function Cartesian( x=null, y=null, w=null, h=null ) {
    if ( w !== null ) this.w=w;
    if ( h !== null ) this.h=h;
    this.Update();
- };
- this.SetPoint = function ( x, y, z=null ) { this.Init(); this.Set(x,y); this.z=z; };
- this.SetCircle = function ( x, y, r ) { this.Init();  this.Set(x,y,r*2); this.w=r*2; this.w2=r; };
- this.SetRect = function ( x, y, w, h ) { this.Set(x,y,w,h); };
- this.Corners = function ( x, y, x2, y2 ) { this.SetRect( Math.min(x,x2), Math.min(y,y2), Math.abs(x2-x), Math.abs(y2-y) ); };
- this.SetCorners = this.Corners;
- this.Box = function (x , y, z, x2, y2, z2 ) {};
- this.Cube = function (x , y, z, h, w, d ) {};
- this.SetLine = this.Corners;
- this.Name = function ( s ) { this.name=s; };
- this.GetPoint2d = function( t ) { return new Cartesian( this.x+t*this.w, this.y+t*this.h ); };
- this.GetPoint = function ( t ) {
+ }
+ SetPoint( x, y, z=null ) { this.Init(); this.Set(x,y); this.z=z; }
+ SetCircle( x, y, r ) { this.Init();  this.Set(x,y,r*2); this.w=r*2; this.w2=r; }
+ SetRect( x, y, w, h ) { this.Set(x,y,w,h); }
+ Corners( x, y, x2, y2 ) { this.SetRect( Math.min(x,x2), Math.min(y,y2), Math.abs(x2-x), Math.abs(y2-y) ); }
+ SetCorners( x, y, x2, y2 ) { this.SetRect( Math.min(x,x2), Math.min(y,y2), Math.abs(x2-x), Math.abs(y2-y) ); }
+ SetLine( x, y, x2, y2 ) { this.SetRect( Math.min(x,x2), Math.min(y,y2), Math.abs(x2-x), Math.abs(y2-y) ); }
+ Box(x , y, z, x2, y2, z2 ) {}
+ Cube(x, y, z, h, w, d ) {}
+ Name( s ) { this.name=s; }
+ GetPoint2d( t ) { return new Cartesian( this.x+t*this.w, this.y+t*this.h ); }
+ GetPoint( t ) {
   var c=new Cartesian();
   if ( this.is2d() ) return this.GetPoint2d(t);
-  else c.SetPoint( this.x+t*(this.x2-this.x), this.y+t*(this.y2-this.y), this.z+t*(this.z2-this.z)); return c;
- };
- this.PointOnCircle = function( time, scale=1.0 ) {
+  else c.SetPoint( this.x+t*(this.x2-this.x), this.y+t*(this.y2-this.y), this.z+t*(this.z2-this.z));
+  return c;
+ }
+ PointOnCircle( time, scale=1.0 ) {
   return new Cartesian( this.x + Math.cos(time*PI*2)*this.Radius()*scale, this.y + Math.sin(time*PI*2)*this.Radius()*scale, this.z );
- };
- this.LineTime = function ( x, y ) { var c = new Cartesian(); c.Corners(this.x,this.y,x,y); return c.Distance2d()/this.Distance2d(); };
- this.Translate = function ( dx, dy ) { this.Set( x+dx, y+dy ); };
- this.MoveBy = this.Translate;
- this.Aspect = function() { if ( type === "linerect" ) return this.w/this.h; else return false; };
- this.AspectInverse = function() { if ( type === "linerect" ) return this.h/this.w; else return false; };
- this.rad2deg = function( r ) { return r*(180/Math.PI); };
- this.deg2rad = function( d ) { return d*(Math.PI/180); };
- this.LineAngle = function() { return Math.atan2( this.h, this.w ); };
- this.Distance2d = function() { var v1=this.x2-this.x, v2=this.y2-this.y; return Math.sqrt(v1*v1+v2*v2); };
- this.Distance3d = function() { var d2d = ddistance(x,y,xx,yy); var v3=this.z2-this.z; return sqrt(d2d*d2d+v3*v3); };
- this.Diameter = function() { return this.w; };
- this.Radius = function() { return this.w2; };
- this.AverageRadius = function() { return (this.w+this.h)/2.0; };
- this.Center = function() { return { x:this.x + this.w2, y:this.y + this.h2 }; };
- this.Add = function(c) {
+ }
+ LineTime( x, y ) { var c = new Cartesian(); c.Corners(this.x,this.y,x,y); return c.Distance2d()/this.Distance2d(); }
+ Translate( dx, dy ) { this.Set( x+dx, y+dy ); }
+ MoveBy( dx, dy ) { this.Set( x+dx, y+dy ); }
+ Aspect() { if ( type === "linerect" ) return this.w/this.h; else return false; }
+ AspectInverse() { if ( type === "linerect" ) return this.h/this.w; else return false; }
+ rad2deg( r ) { return r*(180/Math.PI); }
+ deg2rad( d ) { return d*(Math.PI/180); }
+ LineAngle() { return Math.atan2( this.h, this.w ); }
+ Distance2d() { var v1=this.x2-this.x, v2=this.y2-this.y; return Math.sqrt(v1*v1+v2*v2); }
+ Distance3d() { var d2d = ddistance(x,y,xx,yy); var v3=this.z2-this.z; return sqrt(d2d*d2d+v3*v3); }
+ Diameter() { return this.w; }
+ Radius() { return this.w2; }
+ AverageRadius() { return (this.w+this.h)/2.0; }
+ Center() { return { x:this.x + this.w2, y:this.y + this.h2 }; }
+ Add(c) {
   var d = new Cartesian();
   d.SetPoint(c.x+this.x,c.y+this.y);
   return d;
- };
- this.Scale = function(x) { this.Set(this.x*x,this.y*y); };
- this.RotateZY = function ( deg, sourcePoint=null ) {
+ }
+ Scale(x,y=null) { if ( y ) this.Set(this.x*x,this.y*y); else this.Set(this.x*x,this.y*x); }
+ RotateZY( deg, sourcePoint=null ) {
   if ( sourcePoint === null ) sourcePoint = new Cartesian(0,0);
   var r,theta,oZ,oY,oT,rZ,rY,rads;
   rads=this.deg2rad(deg);
@@ -131,8 +136,8 @@ function Cartesian( x=null, y=null, w=null, h=null ) {
   var c= new Cartesian();
   c.SetPoint(sourcePoint.x,rY,rZ);
   return c;
- };
- this.Rotate = function (deg,cx=0,cy=0) {
+ }
+ Rotate(deg,cx=0,cy=0) {
   var rads = this.deg2rad(deg);
   var _cos = Math.cos(rads);
   var _sin = Math.sin(rads);
@@ -140,8 +145,8 @@ function Cartesian( x=null, y=null, w=null, h=null ) {
    (_cos * (this.x - cx)) + (_sin * (this.y - cy)) + cx,
    (_cos * (this.y - cy)) - (_sin * (this.x - cx)) + cy
   );
- };
- this.RotateRectangle2d = function ( deg=0 ) {
+ }
+ RotateRectangle2d( deg=0 ) {
   var center=this.Center();
   var a=new Cartesian(this.x,this.y);
   var b=new Cartesian(this.x2,this.y);
@@ -154,13 +159,13 @@ function Cartesian( x=null, y=null, w=null, h=null ) {
    c.Rotate(deg,center.x,center.y),
    d.Rotate(deg,center.x,center.y)
   );
- };
- this.LineMagnitude = function() {
+ }
+ LineMagnitude() {
   var vector={ x:this.x2-this.x, y:this.y2-this.y };
   return sqrt( vector.x*vector.x + vector.y+vector.y );
- };
- this.is2d = function() { return (this.z2!==null&&this.z!==null); };
- this.DistancePointSegment = function ( px,py,pz=null ) {
+ }
+ is2d() { return (this.z2!==null&&this.z!==null); }
+ DistancePointSegment( px,py,pz=null ) {
   var is2d = this.is2d() || pz === null;
   if ( pz === null ) pz = 0.0;
   var lineMag=this.LineMagnitude();
@@ -183,17 +188,17 @@ function Cartesian( x=null, y=null, w=null, h=null ) {
    linelerp: U,
    distance: (is2d?d.Distance2d():d.Distance3d())
   };
- };
- this.PointOnLine = function ( tx, ty, nearness=1.0 ) {
+ }
+ PointOnLine( tx, ty, nearness=1.0 ) {
   var result=DistancePointSegment(tx,ty);
   if ( result === false ) return false;
   return result.distance < nearness;
- };
- this.toString = function ( stringFormat=null ) {
+ }
+ toString( stringFormat=null ) {
   if ( stringFormat === null ) return JSON.stringify(this);
   else return JSON.stringify( this.toObject(stringFormat) );
- };
- this.toObject = function ( objectFormat=null ) {
+ }
+ toObject( objectFormat=null ) {
   if ( objectFormat === null ) { // default format, best guess
    switch ( this.type ) {
     case "point": return this.z===null?{x:this.x,y:this.y}:{x:this.x,y:this.y,z:this.z}; //x,y or x,y,z
@@ -274,8 +279,10 @@ function Cartesian( x=null, y=null, w=null, h=null ) {
     };
    }
   }  
- };
- this.toArray = function ( arrayFormat=null ) {
+ }
+ toArray( arrayFormat=null ) {
+  var a=[];
+  var i=0;
   if ( arrayFormat === null ) { // default format, best guess
    switch ( this.type ) {
     case "point": return this.z===null?[this.x,this.y]:[this.x,this.y,this.z]; //x,y or x,y,z
@@ -284,8 +291,6 @@ function Cartesian( x=null, y=null, w=null, h=null ) {
     case "rectangle": return [this.x,this.y,this.w,this.h]; //x,y,w,h
     default: // default->default format, best guess
      {
-      var a=[];
-      var i=0;
       if ( this.x !== null ) a[i++]=this.x;
       if ( this.y !== null ) a[i++]=this.y;
       if ( this.x2 !== null ) a[i++]=this.x2;
@@ -312,8 +317,6 @@ function Cartesian( x=null, y=null, w=null, h=null ) {
     case "ccwrect": return this.toArray("cwrect").reverse();
     case "default":
      {
-      var a=[];
-      var i=0;
       if ( this.x !== null ) a[i++]=this.x;
       if ( this.y !== null ) a[i++]=this.y;
       if ( this.x2 !== null ) a[i++]=this.x2;
@@ -324,8 +327,6 @@ function Cartesian( x=null, y=null, w=null, h=null ) {
      }
     default: // default->default format, best guess
      {
-      var a=[];
-      var i=0;
       if ( this.x !== null ) a[i++]=this.x;
       if ( this.y !== null ) a[i++]=this.y;
       if ( this.x2 !== null ) a[i++]=this.x2;
@@ -336,11 +337,9 @@ function Cartesian( x=null, y=null, w=null, h=null ) {
      }
    }
   }
- };
+ }
  // Initialize and Construct
- this.Init();
- if ( x !== null && y !== null ) this.Set(x,y,w,h);
-}
+};
 
 // Class: Cartesians
 // A group of points.

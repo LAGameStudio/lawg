@@ -190,10 +190,10 @@ function int(a) { return parseInt(a); }
 function explode( sep, str ) { return str.split(sep); }
 function implode( sep, arr ) { var res=""; for ( var i=0; i<arr.length; i++ ) { res+=arr[i]; if ( i != arr.length -1 ) res+=sep; } return res; }
 function is_array(arr) { return Array.isArray(arr); }
-function is_object(o) { if ( typeof o == 'object') return true; return false; }
+function is_object(o) { return ( typeof o == 'object') ? true : false; }
 function isBoolean(obj) { return obj === true || obj === false || toString.call(obj) === '[object Boolean]'; }
 function is_bool(obj) { return isBoolean(obj); }
-function is_number(o) { if (typeof o === 'number') return true; return false;  }
+function is_number(o) { return (typeof o === 'number') ? true : false;  }
 function is_int(o) { return Number.isInteger(o); }
 function rtrim (str, charlist) {
   //  discuss at: https://locutus.io/php/rtrim/
@@ -268,7 +268,7 @@ function html_Switch( domid, checked=false, disabled=false) {
 
 
 /// A deferred queue that gaurantees unique calls
-
+/*
 var deferredQueueEventCodes=[];
 var deferredQueueFunctions=[];
 function CallDeferredUnique(code,fun) {
@@ -286,7 +286,7 @@ function updateDeferredQueue() {
  deferredQueueFunctions=[];
 }
 setInterval(updateDeferredQueue,15);
-
+*/
 
 //// Time and date
 
@@ -588,9 +588,8 @@ class LinkedList {
  }
  
  Pop() {
-  var item=last;
-  this.Remove(item);
-  return item;
+  var item=this.Last();
+  return this.Remove(item);
  }
  
  InsertAt( item, index ) {

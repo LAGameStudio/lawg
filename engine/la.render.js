@@ -95,7 +95,7 @@ class LARenderers extends LinkedList {
           this.ctx.rect(0, 0, la.display.w, la.display.h);
           this.ctx.fillStyle = this.background;
           this.ctx.fill();
-        }
+        };
         // Per-frame call (customizable)
         renderer.Frame=function(renderer,list) { renderer.Clear(); };
         console.log(element);
