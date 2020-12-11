@@ -2,7 +2,7 @@
 class MyEntity extends Entity {
   constructor() {
     super();
-    this.image=la.art.library.Load("tests/i/Pacman.png")
+    this.image=la.art.library.Load("tests/i/Pacman.png");
     this.Render=function(list) {
      la.art.Bind(list.renderer.ctx);
      la.art.Draw(this.image,la.input.mx,la.input.my);

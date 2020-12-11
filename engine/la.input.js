@@ -113,8 +113,7 @@ class KeyboardInput {
    this.rbracket=this.keyboard(221);
    this.apostrophe=this.keyboard(222);
    this.backtick=this.keyboard(192);
-   this.del=this.keyboard(127);
-   
+   this.del=this.keyboard(127);   
  }
  GetKeyName(code) {
   switch ( code ) {

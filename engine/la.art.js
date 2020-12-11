@@ -214,15 +214,39 @@ class Art2D {
   Fill( clr ) {
     this.context.fillStyle=clr;
   }
-  Stroke( clr ) {
+  Stroke( clr, lineWidth=null ) {
+    if ( lineWidth ) this.context.lineWidth = lineWidth;
     this.context.strokeStyle=clr;
+  }
+  LinesRotated( deg, points, ofsx=0, ofsy=0 ) {
+   if ( points.length < 2 ) return;
+   this.context.beginPath();
+   for ( var i=0; i<points.length; i++ ) {
+    var j= i<points.length-1 ? i+1 : 0;
+    var p1=new Cartesian(points[i].x,points[i].y);
+    p1=p1.Rotate(deg);
+    var p2=new Cartesian(points[j].x,points[j].y);
+    p2=p2.Rotate(deg);
+    this.context.moveTo(p1.x+ofsx, p1.y+ofsy);
+    this.context.lineTo(p2.x+ofsx, p2.y+ofsy);
+    this.context.stroke();
+   }
+  }
+  Lines( points, ofsx=0, ofsy=0 ) {
+   if ( points.length < 2 ) return;
+   this.context.beginPath();
+   for ( var i=0; i<points.length; i++ ) {
+    var j= i<points.length-1 ? i+1 : 0;
+    this.context.moveTo(points[i].x+ofsx, points[i].y+ofsy);
+    this.context.lineTo(points[j].x+ofsx, points[j].y+ofsy);
+    this.context.stroke();
+   }
   }
   Line( x, y, w, h ) {    
    this.context.beginPath();
    this.context.moveTo(x, y);
    this.context.lineTo(w, h);
    this.context.stroke();
-   this.context.moveTo(0, 0);
   }
   Rectangle( x, y, w, h ) {
     var _x=x,_y=y,_w=w,_h=h;

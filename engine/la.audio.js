@@ -44,7 +44,7 @@ class LAAudio {
   }
   
   Play( file_or_files_or_json ) {
-    var a=is_object(file_or_files_or_json) ? new Howl(file_or_files_or_json) : new Howl({ src: assure_string_array(file_or_files_or_json) });
+    var a=is_object(file_or_files_or_json) ? new Howl(file_or_files_or_json) : new Howl({ src: assure_string_array(file_or_files_or_json), html5:true });
     a.play();
     return a;
   }

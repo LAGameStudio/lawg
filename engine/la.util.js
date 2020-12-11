@@ -490,13 +490,16 @@ function tintImage(image, color, opacity = 0.5) {
 
 //// List Helpers, adapted from https://github.com/h3rb/ZeroTypesSFL
 
+var ListItemID=0;
+
 class ListItem {
  constructor() {
   this.name="";
   this.prev=null;
   this.next=null;
   this.index=-1;
-  this.id=-1;
+  this.id=ListItemID;
+  ListItemID+=1;  if (ListItemID == Number.MAX_SAFE_INTEGER-1) ListItemID=Number.MIN_SAFE_INTEGER;
   this.memberOf=null;
   this.wasMemberOf=null;
   this.rootClass=ListItem;
@@ -526,12 +529,15 @@ class LinkedList {
  }
 
  IndexByID( id ) {
-  if ( defined(id.isListItem) && id.isListItem ) id=id.id;
-  for ( var i=0; i<this.renderers.length; i++ ) if ( this.renderers[i].id == id ) return i;
+  var value = defined(id.isListItem) && id.isListItem ? id.id : id;
+  for ( var i=0; i<this.list.length; i++ ) if ( this.list[i].id == value ) return i;
   return -1;
  }
-  
- Count() { return this.list.length; }  
+ 
+ Get( index ) { return this.list[index]; }
+ 
+ Count() { return this.list.length; }
+ 
  LastIndex() { return this.list.length-1; }
  First() { return this.list[0]; }  
  Last() {
@@ -560,15 +566,19 @@ class LinkedList {
   this.ToBack(item);  
  }
  
- Remove( item ) {
+ Remove( id ) {
+  if ( defined(id.isListItem) && id.isListItem ) id=id.id;
+  var index=this.IndexByID(id);
+  if ( index < 0 ) return false;
+  var item=this.list[index];
   if (item.memberOf != this ) return false;
-  this.ToFront(item);
-  if ( item.prev ) item.prev.next=null;
+  this.list.splice(index, 1);
   item.wasMemberOf=this;
   item.memberOf=null;
   item.prev=null;
   item.next=null;
-  return true;
+  this.Reindex();
+  return item;
  }
  
  Pop() {
@@ -579,54 +589,26 @@ class LinkedList {
  
  InsertAt( item, index ) {
   this.Append(item);
-  this.IndexTo( item, index );  
+  return this.IndexTo( item, index );  
  }
  
  InsertAfter( item, index ) {
   this.Append(item);
-  this.IndexTo( item, index+1 );
+  return this.IndexTo( item, index+1 );
  }
  
  Forward( id ) {
   if ( defined(id.isListItem) && id.isListItem ) id=id.id;
-  var index=this.IndexByID(index);
+  var index=this.IndexByID(id);
   if ( index < 0 || index == this.LastIndex() ) return false;
-  var to=index+1;
-  var list=[];
-  list[to]=this.list[index];
-  var j=0;
-  for ( var i=0; i<this.list.length; i++ ) {
-    if ( i < to ) list[j]=this.list[i];
-    if ( i > to ) list[j]=this.list[i];
-    list[j].prev=(j == 0 ? null : list[j-1]);
-    list[j].next=(j == this.LastIndex() ? null : list[j+1]);
-    list[j].OnReindex(j);
-    list[j].index=j;
-    j++;
-  }
-  this.list=list;
-  return true;
+  return this.IndexTo(id,index);
  }
  
  Backward( id ) {
    if ( defined(id.isListItem) && id.isListItem ) id=id.id;
-   var index=this.IndexByID(index);
+   var index=this.IndexByID(id);
    if ( index < 1 ) return false;
-   var to=index-1;
-   var list=[];
-   list[to]=this.list[index];
-   var j=0;
-   for ( var i=0; i<this.list.length; i++ ) {
-     if ( i < to ) list[j]=this.list[i];
-     if ( i > to ) list[j]=this.list[i];
-     list[j].prev=(j == 0 ? null : list[j-1]);
-     list[j].next=(j == this.LastIndex() ? null : list[j+1]);
-     list[j].OnReindex(j);
-     list[j].index=j;
-     j++;
-   }
-   this.list=list;
-   return true;
+   return this.IndexTo(id,index-1);
  }
  
  ToBack( id ) { return this.IndexTo(id,0); }  
@@ -635,32 +617,20 @@ class LinkedList {
  IndexTo( id, to ) {
    if (to < 0 || to > this.LastIndex() ) return false;
    if ( defined(id.isListItem) && id.isListItem ) id=id.id;
-   var index=this.IndexByID(index);
+   var index=this.IndexByID(id);
    if ( index < 0 ) return false;
    if ( index == to ) return true;
-   var list=[];
-   list[to]=this.list[index];
-   var j=0;
-   var lastIndex=this.LastIndex();
-   for ( var i=0; i<this.list.length; i++ ) {
-     if ( i < to ) list[j]=this.list[i];
-     if ( i > to ) list[j]=this.list[i];
-     list[j].prev=(j == 0 ? null : list[j-1]);
-     list[j].next=(j == lastIndex ? null : list[j+1]);
-     list[j].OnReindex(j);
-     list[j].index=j;
-     j++;
-   }
-   this.list=list;
+   this.list.splice(to, 0, this.list.splice(index, 1)[0]);
+   this.Reindex();
    return true;   
  }
  
  Reindex() {
   for ( var j=0; j<this.list.length; j++ ) {
-   list[j].prev=(j == 0 ? null : list[j-1]);
-   list[j].next=(j == lastIndex ? null : list[j+1]);
-   list[j].OnReindex(j);
-   list[j].index=j;
+   this.list[j].prev=(j == 0 ? null : this.list[j-1]);
+   this.list[j].next=(j == this.LastIndex() ? null : this.list[j+1]);
+   this.list[j].OnReindex(j);
+   this.list[j].index=j;
   }  
  }
  

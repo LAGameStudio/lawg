@@ -24,7 +24,7 @@ class LAConfig {
     this.animation = {
       FRAMERATE: 0 // 0 means "as fast as optimal, try for 60FPS", otherwise values are in "frames per second", 0 is probably best value, and aims for 60fps
     };
-    
+    this.animation.FPS=60; // update when you change the above    
     // Global values
     this.global={ frame: 0, paused: false };
     var d = new Date();
@@ -57,3 +57,4 @@ class LAConfig {
 };
 
 la.config = new LAConfig();
+la.FPS = function () { return la.config.animation.FPS; }

@@ -59,6 +59,11 @@ function Cartesian( x=null, y=null, w=null, h=null ) {
    }
   };
   this.Set = function ( x, y, w=null, h=null ) {
+   if ( !y && classname(x) == "Cartesian" ) {
+    this.Set(x.x,x.y,x.w,x.h);
+    this.Update();
+    return;
+   }
    this.x=x;
    this.y=y;
    if ( w !== null ) this.w=w;
@@ -94,6 +99,12 @@ function Cartesian( x=null, y=null, w=null, h=null ) {
  this.Radius = function() { return this.w2; };
  this.AverageRadius = function() { return (this.w+this.h)/2.0; };
  this.Center = function() { return { x:this.x + this.w2, y:this.y + this.h2 }; };
+ this.Add = function(c) {
+  var d = new Cartesian();
+  d.SetPoint(c.x+this.x,c.y+this.y);
+  return d;
+ };
+ this.Scale = function(x) { this.Set(this.x*x,this.y*y); };
  this.RotateZY = function ( deg, sourcePoint=null ) {
   if ( sourcePoint === null ) sourcePoint = new Cartesian(0,0);
   var r,theta,oZ,oY,oT,rZ,rY,rads;
@@ -116,7 +127,7 @@ function Cartesian( x=null, y=null, w=null, h=null ) {
   c.SetPoint(sourcePoint.x,rY,rZ);
   return c;
  };
- this.RotateAround = function (cx, cy, deg) {
+ this.Rotate = function (deg,cx=0,cy=0) {
   var rads = this.deg2rad(deg);
   var _cos = Math.cos(rads);
   var _sin = Math.sin(rads);
@@ -133,10 +144,10 @@ function Cartesian( x=null, y=null, w=null, h=null ) {
   var d=new Cartesian(this.x,this.y2);
   return new Cartesians(
    "rectangle",
-   a.RotateAround(center.x,center.y,deg),
-   b.RotateAround(center.x,center.y,deg),
-   c.RotateAround(center.x,center.y,deg),
-   d.RotateAround(center.x,center.y,deg)
+   a.Rotate(deg,center.x,center.y),
+   b.Rotate(deg,center.x,center.y),
+   c.Rotate(deg,center.x,center.y),
+   d.Rotate(deg,center.x,center.y)
   );
  };
  this.LineMagnitude = function() {
