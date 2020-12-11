@@ -43,24 +43,32 @@ class LAAudio {
     la.config.global.howler.volume(value);
   }
   
+  Load( file_or_files_or_json ) {
+    var a=is_object(file_or_files_or_json) ? new Howl(file_or_files_or_json) : new Howl({ src: assure_string_array(file_or_files_or_json) });
+    return a;
+  }  
+  
   Sound( file_or_files_or_json ) {
     var a=is_object(file_or_files_or_json) ? new Howl(file_or_files_or_json) : new Howl({ src: assure_string_array(file_or_files_or_json) });
-    this.howls[this.howls.length]=a;
     return a;
   }
   
-  Play( file_or_files_or_json ) {
-    var a=is_object(file_or_files_or_json) ? new Howl(file_or_files_or_json) : new Howl({ src: assure_string_array(file_or_files_or_json), html5:true });
-    a.play();
-    return a;
+  Play( filename ) {
+    if ( is_object(filename) ) this.howls[filename.src]=new Howl(filename);
+    else if ( !defined(this.howls[filename]) ) {
+     this.howls[filename]=new Howl({ src: assure_string_array(filename), html5:true });
+     this.howls[filename].play();
+    } else {
+      this.howls[filename].play();
+    }
+    return this.howls[filename];
   }
   
   PlayOnce( unique_string, file_or_files_or_json ) {
     if ( defined(this.unique_howls[unique_string]) ) return false;
-    var a=is_object(file_or_files_or_json) ? new Howl(file_or_files_or_json) : new Howl({ src: assure_string_array(file_or_files_or_json) });
-    this.unique_howls[unique_string] = a;
-    a.unique_string=unique_string;
-    a.play();
+    this.unique_howls[unique_string] = is_object(file_or_files_or_json) ? new Howl(file_or_files_or_json) : new Howl({ src: assure_string_array(file_or_files_or_json) });
+    this.unique_howls[unique_string].unique_string=unique_string;
+    this.unique_howls[unique_string].play();
     return true;
   }
 
