@@ -1,3 +1,5 @@
+'use strict';
+
 // Effectively an overwriting merge of two objects
 function importObject(to, from,name=null) {
  var oname=name;
@@ -116,6 +118,10 @@ function ProbeAreaWidth(domid) {
 }
 
 
+function randomele( arr ) {
+ return arr[Math.floor(Math.random()*arr.length)];
+}
+
 // Generate a download from a function
 function downloadLink(url,filename) {
   var element = document.createElement('a');
@@ -177,7 +183,7 @@ function passCheckFun( event, id="password-strength-text" ) {
 // php brainfarts
 function isset(obj,elem) { return defined(obj) && obj.hasOwnProperty(elem); }
 function var_dump(a,b=null) { if ( b ) { console.log(a); console.log(b); } else console.log(a); }
-function defined(objele) { try { result= (typeof objele !== 'undefined'); } catch(e) { result=false; } return result; }
+function defined(objele) { var result=false; try { result= (typeof objele !== 'undefined'); } catch(e) { result=false; } return result; }
 function classname(o) { return typeof o == "object" ? o.constructor.name : false; }
 function isnull(obj) { return (obj !== null); }
 function int(a) { return parseInt(a); }

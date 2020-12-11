@@ -1,3 +1,5 @@
+'use strict';
+
 // Cartesian utility library adapted from ZeroTypes http://zero.handmade.network
 
 // Class: Cartesian
@@ -71,7 +73,7 @@ function Cartesian( x=null, y=null, w=null, h=null ) {
    this.Update();
  };
  this.SetPoint = function ( x, y, z=null ) { this.Init(); this.Set(x,y); this.z=z; };
- this.SetCircle = function ( x, y, r ) { this.Init();  this.Set(x,y,r*2); };
+ this.SetCircle = function ( x, y, r ) { this.Init();  this.Set(x,y,r*2); this.w=r*2; this.w2=r; };
  this.SetRect = function ( x, y, w, h ) { this.Set(x,y,w,h); };
  this.Corners = function ( x, y, x2, y2 ) { this.SetRect( Math.min(x,x2), Math.min(y,y2), Math.abs(x2-x), Math.abs(y2-y) ); };
  this.SetCorners = this.Corners;
@@ -84,6 +86,9 @@ function Cartesian( x=null, y=null, w=null, h=null ) {
   var c=new Cartesian();
   if ( this.is2d() ) return this.GetPoint2d(t);
   else c.SetPoint( this.x+t*(this.x2-this.x), this.y+t*(this.y2-this.y), this.z+t*(this.z2-this.z)); return c;
+ };
+ this.PointOnCircle = function( time, scale=1.0 ) {
+  return new Cartesian( this.x + Math.cos(time*PI*2)*this.Radius()*scale, this.y + Math.sin(time*PI*2)*this.Radius()*scale, this.z );
  };
  this.LineTime = function ( x, y ) { var c = new Cartesian(); c.Corners(this.x,this.y,x,y); return c.Distance2d()/this.Distance2d(); };
  this.Translate = function ( dx, dy ) { this.Set( x+dx, y+dy ); };

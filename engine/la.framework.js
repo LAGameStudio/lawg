@@ -1,3 +1,5 @@
+'use strict';
+
 la.config.Update();
 
 // Establish our animation loop

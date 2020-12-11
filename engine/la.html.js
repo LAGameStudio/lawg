@@ -1,3 +1,4 @@
+'use strict';
 
 // Executes your fun "form model" that usually is built off an API data block
 // expects: unpackFunc( data, model, domid_prefix, context )

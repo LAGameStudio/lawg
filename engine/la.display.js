@@ -1,3 +1,5 @@
+'use strict';
+
 class LADisplay {
   constructor() {
     this.screenfull=screenfull;

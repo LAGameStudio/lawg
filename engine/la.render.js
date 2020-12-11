@@ -1,3 +1,5 @@
+'use strict';
+
 class LARenderer extends ListItem {
   constructor() {
     super();
@@ -47,6 +49,7 @@ class LARenderer extends ListItem {
    $(this.element).remove();
   }
 };
+
 
 
 class LARenderers extends LinkedList {

@@ -1,3 +1,5 @@
+'use strict';
+
 // Keyboard Events
 class KeyboardInput {
  constructor() {

@@ -1,3 +1,5 @@
+'use strict';
+
 class LAAudio {
   
   constructor() {
@@ -7,7 +9,7 @@ class LAAudio {
     this.sprite_howls=[];
     this.howler = {
       volume: 1.0,
-      html5: false,
+      html5: true,
       loop: false,
       preload: true,
       autoplay: false,
@@ -30,11 +32,15 @@ class LAAudio {
   }
   
   Clear() {
-    la.config.howler.unload();
+    la.config.global.howler.unload();
     this.howls=[];
     this.unique_howls=[];
     this.limited_howls=[];
     this.sprite_howls=[];    
+  }
+  
+  SetMasterVolume( value ) {
+    la.config.global.howler.volume(value);
   }
   
   Sound( file_or_files_or_json ) {
@@ -79,6 +85,7 @@ class LAAudio {
         a.playing_counter--;
       });
     }
+    return a;
   }
     
   Sprites( unique_string, file_or_files_or_json, spritedata ) {

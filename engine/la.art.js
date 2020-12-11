@@ -1,3 +1,4 @@
+'use strict';
 
 class Texture extends ListItem {
   constructor() {
@@ -239,8 +240,21 @@ class Art2D {
     var j= i<points.length-1 ? i+1 : 0;
     this.context.moveTo(points[i].x+ofsx, points[i].y+ofsy);
     this.context.lineTo(points[j].x+ofsx, points[j].y+ofsy);
-    this.context.stroke();
    }
+   this.context.closePath();
+   this.context.stroke();
+  }
+  FillLines( points, ofsx=0, ofsy=0 ) {
+   if ( points.length < 2 ) return;
+   this.context.beginPath();
+   for ( var i=0; i<points.length; i++ ) {
+    var j= i<points.length-1 ? i+1 : 0;
+    this.context.moveTo(points[i].x+ofsx, points[i].y+ofsy);
+    this.context.lineTo(points[j].x+ofsx, points[j].y+ofsy);
+   }
+   this.context.closePath();
+   this.context.stroke();
+   this.context.fill();
   }
   Line( x, y, w, h ) {    
    this.context.beginPath();
