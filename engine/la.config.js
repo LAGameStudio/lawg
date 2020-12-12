@@ -28,8 +28,7 @@ class LAConfig {
     this.animation.FPS=60; // update when you change the above    
     // Global values
     this.global={ frame: 0, paused: false };
-    let d = new Date();
-    this.global.started= d.getMilliseconds();
+    this.global.started= Date.now();
   }
   // Updates (or initializes) states for global settings.
   Update() {
@@ -48,8 +47,7 @@ class LAConfig {
     });
   }
   Frame() {
-    let d = new Date();
-    this.global.time = d.getMilliseconds();
+    this.global.time = Date.now();
     this.global.elapsed = this.global.time-this.global.started;
     this.global.expired = this.global.elapsed / 1000.0;
     this.global.frame+=1;

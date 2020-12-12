@@ -107,7 +107,7 @@ function isPageVisible() {
 
 // Responsive tests for area width
 function ProbeAreaWidth(domid) {
-  let probe=document.createElement("div");
+ let probe=document.createElement("div");
 	let outer=Get(domid);
   outer.appendChild(probe);
 	probe.setAttribute("id","ProbeAreaWidth-probe");
@@ -496,6 +496,9 @@ function tintImage(image, color, opacity = 0.5) {
 
 //// List Helpers, adapted from https://github.com/h3rb/ZeroTypesSFL
 
+
+var ListItemPool=[];
+
 var ListItemID=0;
 
 class ListItem {
@@ -507,10 +510,11 @@ class ListItem {
   this.id=ListItemID;
   ListItemID+=1;  if (ListItemID == Number.MAX_SAFE_INTEGER-1) ListItemID=Number.MIN_SAFE_INTEGER;
   this.memberOf=null;
-  this.wasMemberOf=null;
-  this.rootClass=ListItem;
+//  this.wasMemberOf=null;
+//  this.rootClass=ListItem;
   this.isListItem=true;
  }
+ Init() {}
  Up() { this.Forward(); }
  Forward() { this.memberOf.Forward(this); }
  Backward() { this.memberOf.Backward(this); }  
@@ -579,12 +583,45 @@ class LinkedList {
   let item=this.list[index];
   if (item.memberOf != this ) return false;
   this.list.splice(index, 1);
-  item.wasMemberOf=this;
+//  item.wasMemberOf=this;
   item.memberOf=null;
   item.prev=null;
   item.next=null;
   this.Reindex();
   return item;
+ }
+ 
+ // Use to delete / recycle
+ Delete( id ) {
+  if ( defined(id.isListItem) && id.isListItem ) id=id.id;
+  let index=this.IndexByID(id);
+  if ( index < 0 ) return false;
+  let item=this.list[index];
+  if (item.memberOf != this ) return false;
+  this.list.splice(index, 1);
+//  item.wasMemberOf=this;
+  item.memberOf=null;
+  item.prev=null;
+  item.next=null;
+  this.Reindex();
+  this.ToPool(item);
+ }
+ 
+ ToPool(item) {
+  let cn=classname(item);
+  if ( !defined(ListItemPool[cn]) ) ListItemPool[cn]=[ item ];
+  else ListItemPool.push(item);
+ }
+ 
+ // Use to pool resources
+ Create( cn, allocfun=null ) {
+  if ( defined(ListItemPool[cn]) && ListItemPool[cn].length > 0 ) {
+   var o=ListItemPool[cn].pop();
+   o.Init();
+   return o;
+  } else {
+   return (allocfun ? allocfun() : null);
+  }
  }
  
  Pop() {

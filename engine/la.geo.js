@@ -110,9 +110,7 @@ class Cartesian {
  AverageRadius() { return (this.w+this.h)/2.0; }
  Center() { return { x:this.x + this.w2, y:this.y + this.h2 }; }
  Add(c) {
-  let d = new Cartesian();
-  d.SetPoint(c.x+this.x,c.y+this.y);
-  return d;
+  this.SetPoint(c.x+this.x,c.y+this.y,c.z+this.z);
  }
  Scale(x,y=null) { if ( y ) this.Set(this.x*x,this.y*y); else this.Set(this.x*x,this.y*x); }
  RotateZY( deg, sourcePoint=null ) {

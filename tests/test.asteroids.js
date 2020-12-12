@@ -3,10 +3,13 @@
 class Asteroid extends Entity {
   constructor() {
     super();
+    this.Init();
+  }
+  Init() {
     this.isAsteroid=true;
     this.Make(64);
     this.Between=function(list) {
-     this.position=this.position.Add(this.velocity);
+     this.position.Add(this.velocity);
      while ( this.position.x < 0 ) this.position.x+=la.display.w;
      while ( this.position.y < 0 ) this.position.y+=la.display.h;
      if ( this.position.x > la.display.w ) this.position.x-=la.display.w;
@@ -20,10 +23,11 @@ class Asteroid extends Entity {
     };
     this.Shatter=function(list){
       if ( list.Count() < 50 && this.radius > 30 ) for (var i=0; i<this.radius/30; i++ ) {
-        var a=new Asteroid();
+        let a=list.Create("Asteroid",function(){return new Asteroid();});
         a.Make(this.radius/3);
-        a.position=this.position;
+        a.position.Set(this.position);
         list.Append(a);
+        console.log(a);
       }
       list.Remove(this);
     };
@@ -47,6 +51,9 @@ class Asteroid extends Entity {
 class Bullet extends Entity {
   constructor() {
     super();
+    this.Init();
+  }
+  Init() {
     this.isBullet=true;
     this.lifespan=la.FPS() * 5;
     this.position=new Cartesian(0,0);
@@ -55,8 +62,8 @@ class Bullet extends Entity {
     this.Between=function(list) {
      list.CheckCollisions(this);
      this.lifespan--;
-     this.position=this.position.Add(this.velocity);
-     if ( this.lifespan <= 0 ) list.Remove(this);
+     this.position.Add(this.velocity);
+     if ( this.lifespan <= 0 ) list.Delete(this);
     };
     this.Render=function(list) {
      la.art.Bind(list.renderer.ctx);
@@ -69,6 +76,9 @@ class Bullet extends Entity {
 class Player extends Entity {
   constructor() {
     super();
+    this.Init();
+  }
+  Init() {
     this.isPlayer=true;
     this.points=[];
     this.points[0]=new Cartesian(0,0);
@@ -112,7 +122,7 @@ class Player extends Entity {
       list.CheckCollisions(this);
       if ( this.cooldown > 0 ) this.cooldown--;
       if ( this.cooldown <= 0 && la.input.keyboard.ctrl.isDown ) {
-       var bullet=new Bullet();
+       var bullet=list.Create("Bullet",function(){return new Bullet();});
        this.shooting.play();
        bullet.position.Set(this.position);
        var fired=new Cartesian(0,-(10+this.velocity));
@@ -134,13 +144,13 @@ class Player extends Entity {
       this.thrusting.volume(this.velocity/10 * 0.5);
       var momentum=new Cartesian(0,-this.velocity);
       momentum=momentum.Rotate(this.angle);
-      this.position=this.position.Add(momentum);
+      this.position.Add(momentum);
       if ( this.jarred > 0.001 ) this.jarred *= 0.5;
       else this.jarred=0;
       if ( this.jarred > 0 ) {
        momentum=new Cartesian(0,this.jarred);
        momentum=momentum.Rotate(uniform()*360);
-       this.position=this.position.Add(momentum);
+       this.position.Add(momentum);
       }
       while ( this.position.x < 0 ) this.position.x+=la.display.w;
       while ( this.position.y < 0 ) this.position.y+=la.display.h;
@@ -175,7 +185,7 @@ entities.CheckCollisions=function(against) {
       if ( this.list[i].radius > 64 ) la.audio.Play("tests/s/bangMedium.wav");
       else la.audio.Play("tests/s/bangSmall.wav");
       this.list[i].Shatter(this);
-      this.Remove(against);
+      this.Delete(against);
       return;
      }
     }
